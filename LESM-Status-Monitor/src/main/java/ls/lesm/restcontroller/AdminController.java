@@ -27,6 +27,7 @@ import ls.lesm.service.impl.UserServiceImpl;
 @RestController
 @RequestMapping("/api/v1/admin")
 public class AdminController {
+	
 	private static final Logger LOG=LoggerFactory.getLogger(AdminController.class);
 
 	@Autowired
