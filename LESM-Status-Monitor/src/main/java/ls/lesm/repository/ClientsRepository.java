@@ -6,4 +6,6 @@ import ls.lesm.model.Clients;
 
 public interface ClientsRepository extends JpaRepository<Clients, Integer> {
 
+	Clients findByClientsNames(String clientsNames);
+
 }

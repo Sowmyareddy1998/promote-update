@@ -16,6 +16,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -59,10 +61,14 @@ public class MasterEmployeeDetails {
 	
 	private Integer Age;// dob+sysDate
 	private Boolean isInternal;// employee is internal or external
+	
+	@JsonIgnore
 	private Date createdAt;//timpStamp
 	
 	@Column(length=30)
+	@JsonIgnore
 	private String createdBy;//principal
+	
 	private Long phoneNo;
 	
 	

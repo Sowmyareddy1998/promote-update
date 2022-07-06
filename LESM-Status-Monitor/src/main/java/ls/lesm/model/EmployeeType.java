@@ -20,7 +20,7 @@ public class EmployeeType {
 	
 	@Id
 	@GeneratedValue(generator = "emp_type_gen",strategy = GenerationType.AUTO)
-	private Integer empType;
+	private Integer empTypeId;
 	
 	@Column(length=30)
 	private  String Types;

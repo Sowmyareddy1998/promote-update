@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,8 +28,11 @@ public class OnsiteExpensesType {
 	
 	@Column(length=30)
 	private String expType;
+	
+	@JsonIgnore
 	private Date createdAt;//timpStamp
 	
+	@JsonIgnore
 	@Column(length=30)
 	private String createdBy;//principal
 

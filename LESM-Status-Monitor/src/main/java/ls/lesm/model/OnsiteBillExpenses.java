@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,8 +32,11 @@ public class OnsiteBillExpenses {
 	private Double travel;
 	private Double accommodation;
 	private Double food;
+	
+	@JsonIgnore
 	private Date createdAt;//timpStamp
 	
+	@JsonIgnore
 	@Column(length=30)
 	private String createdBy;//principal
 	

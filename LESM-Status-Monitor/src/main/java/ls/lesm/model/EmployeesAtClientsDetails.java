@@ -15,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -38,8 +40,11 @@ public class EmployeesAtClientsDetails {
 	private String desgAtClient;
 	private Integer clientTenure;// toatl months at client(posdate to poedate)
 	private Double totalEarningAtClients;// clientTenure*cliendt salary
+	
+	@JsonIgnore
 	private Date createdAt;//timpStamp
 	
+	@JsonIgnore
 	@Column(length=30)
 	private String createdBy;//principal
 	

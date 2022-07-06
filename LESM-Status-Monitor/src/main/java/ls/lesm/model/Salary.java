@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,8 +32,11 @@ public class Salary {
 	private Integer salId;
 	private Boolean isLatest;// 0 old salary; 1 new salary
 	private Double salary;
+	
+	@JsonIgnore
 	private Date createdAt;
 	
+	@JsonIgnore
 	@Column(length=30)
 	private String createdBy;//principal
 	

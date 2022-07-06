@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,9 +26,9 @@ public class Departments {
 	
 	@Column(length=30)
 	private String depart;
-	
+	@JsonIgnore
 	private Date createdAt;//timpStamp
-	
+	@JsonIgnore
 	@Column(length=30)
 	private String createdBy;//principal
 	

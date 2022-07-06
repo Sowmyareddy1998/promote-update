@@ -1,6 +1,7 @@
 package ls.lesm.restcontroller;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -10,17 +11,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ls.lesm.exception.RoleAreadyExistException;
 import ls.lesm.model.Role;
 import ls.lesm.model.User;
 import ls.lesm.model.UserRole;
 import ls.lesm.repository.RoleRepository;
 import ls.lesm.repository.UserRepository;
+import ls.lesm.service.impl.AdminServiceImpl;
 import ls.lesm.service.impl.UserServiceImpl;
 
 @CrossOrigin("*")
@@ -42,6 +46,9 @@ public class AdminController {
 	
 	@Autowired
 	private RoleRepository roleRopository;
+	
+	@Autowired
+	private AdminServiceImpl adminServiceImpl;
 	
 	//create User
 	@PostMapping("/sign-up")
@@ -71,17 +78,22 @@ public class AdminController {
 	@PostMapping("/create-roles")
 	public ResponseEntity<?> createRoles(@RequestBody Role role) {
 	
-		Role local1=this.roleRopository.findByRoleName(role.getRoleName());
-		Role local2=this.roleRopository.findByRoleId(role.getRoleId());
-		if(local1!=null)
-			throw new RoleAreadyExistException("111","This Role Name Is Already Exist");
-		if(local2!=null)
-			throw new RoleAreadyExistException("222", "This Role ID Is Already Exist");
-		else 
-			role.setRoleName(role.getRoleName().toUpperCase());
-			  this.roleRopository.save(role);
-	
+		this.adminServiceImpl.createNewRole(role);
 		return new ResponseEntity<Role>(HttpStatus.ACCEPTED);
 		}
+
+	@DeleteMapping("/delete-roles/{roleName}")
+	public ResponseEntity<?> deleteRole(@PathVariable String roleName, Role role){
+		this.adminServiceImpl.deleteRoles(roleName);
+		return new ResponseEntity<>(HttpStatus.OK);
+		
+	}
+	
+	@GetMapping("/all-roles")
+	public ResponseEntity<List<Role>> allRoles(){
+		List<Role> allroles= this.adminServiceImpl.getAllRole();
+		return new ResponseEntity<>(allroles, HttpStatus.ACCEPTED);
+		
+	}
 
 }

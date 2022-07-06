@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,8 +35,11 @@ public class InternalExpenses {
 	private Double totalSalPaidTillNow;// salary*bechTenure
 	private Double totalExpenses;// (salary+foodCost+cubicleCost+transportationCost)*benchTenure=totalExpenses
 	private Double profitOrLoss;// totalExpenses-totalEarningAtClients from (EmployeesAtClientsDetails table) if that expense from is internal will add that
+	
+	@JsonIgnore
 	private Date createdAt;//timpStamp
 	
+	@JsonIgnore
 	@Column(length=30)
 	private String createdBy;//principal
 	
