@@ -6,6 +6,6 @@ import ls.lesm.model.EmployeeType;
 
 public interface EmployeeTypeRepository extends JpaRepository<EmployeeType, Integer> {
 
-	EmployeeType findByTypes(String types);
+	EmployeeType findByTypeName(String typeName);
 
 }

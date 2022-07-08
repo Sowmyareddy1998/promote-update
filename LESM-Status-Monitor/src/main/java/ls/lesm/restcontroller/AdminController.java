@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ls.lesm.model.Role;
 import ls.lesm.model.User;
 import ls.lesm.model.UserRole;
+import ls.lesm.payload.request.RoleRequest;
 import ls.lesm.repository.RoleRepository;
 import ls.lesm.repository.UserRepository;
 import ls.lesm.service.impl.AdminServiceImpl;
@@ -76,9 +77,9 @@ public class AdminController {
 	
 	
 	@PostMapping("/create-roles")
-	public ResponseEntity<?> createRoles(@RequestBody Role role) {
+	public ResponseEntity<?> createRoles(@RequestBody RoleRepository role) {
 	
-		this.adminServiceImpl.createNewRole(role);
+		this.adminServiceImpl.createNewRole((RoleRequest) role);
 		return new ResponseEntity<Role>(HttpStatus.ACCEPTED);
 		}
 

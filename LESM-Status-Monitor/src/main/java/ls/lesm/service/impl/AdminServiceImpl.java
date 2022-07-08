@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import ls.lesm.exception.RoleAreadyExistException;
 import ls.lesm.model.Role;
+import ls.lesm.payload.request.RoleRequest;
 import ls.lesm.repository.RoleRepository;
 import ls.lesm.service.AdminService;
 @Service
@@ -27,7 +28,7 @@ public class AdminServiceImpl implements AdminService {
 	
 	@Transactional
 	@Override
-	public Role createNewRole(Role role) {
+	public Role createNewRole(RoleRequest role) {
 		Role local1=this.roleRepository.findByRoleName(role.getRoleName());
 		Role local2=this.roleRepository.findByRoleId(role.getRoleId());
 		if(local1!=null)
@@ -37,7 +38,7 @@ public class AdminServiceImpl implements AdminService {
 		else 
 			role.setRoleName(role.getRoleName().toUpperCase());
 			  this.roleRepository.save(role);
-			  return role;
+			  return new Role();
 	
 	}
 

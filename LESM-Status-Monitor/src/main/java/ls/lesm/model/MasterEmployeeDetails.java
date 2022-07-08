@@ -1,7 +1,7 @@
 package  ls.lesm.model;
 
-import java.sql.Date;
-import java.util.List;
+
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -29,8 +29,13 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class MasterEmployeeDetails {
+public class MasterEmployeeDetails extends AuditModel{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(generator = "emp_id_gen",strategy = GenerationType.AUTO)
 	private Integer empId;// AutoInc Pk
@@ -45,6 +50,7 @@ public class MasterEmployeeDetails {
 	private String lastName;
 	
 	private Date joiningDate;
+	
 	private Date DOB;
 	
 	@Column(length=30)
@@ -62,25 +68,19 @@ public class MasterEmployeeDetails {
 	private Integer Age;// dob+sysDate
 	private Boolean isInternal;// employee is internal or external
 	
-	@JsonIgnore
-	private Date createdAt;//timpStamp
-	
-	@Column(length=30)
-	@JsonIgnore
-	private String createdBy;//principal
-	
 	private Long phoneNo;
 	
-	
+	private String createdBy;
+	@JsonIgnore
 	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name="sub_depart_fk")
 	private SubDepartments subDepartments;
-	
+	@JsonIgnore
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="department_fk")
 	private Departments departments;
 	
-	
+	@JsonIgnore
 	@ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
 	@JoinColumn(name="Desg_fk")
 	private Designations designations;
@@ -90,16 +90,16 @@ public class MasterEmployeeDetails {
 	joinColumns=@JoinColumn (name="emp_id"),
 	inverseJoinColumns =@JoinColumn(name="supervisor_id"))
 	private MasterEmployeeDetails masterEmployeeDetails;*/
-	
+	@JsonIgnore
 	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinColumn(name="supervisor_fk")
 	private MasterEmployeeDetails masterEmployeeDetails;
 	
-
+	@JsonIgnore
 	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name="verticle_fk")
 	private MasterEmployeeDetails verticle;
-	
+	@JsonIgnore
 	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name="emp_type_fk")
 	private EmployeeType employeeType;

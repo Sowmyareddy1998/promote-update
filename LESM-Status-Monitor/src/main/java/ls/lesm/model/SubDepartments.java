@@ -24,8 +24,13 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class SubDepartments {
+public class SubDepartments extends AuditModel {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(generator = "sub_depart_gen",strategy = GenerationType.AUTO)
 	private Integer subDepartId;
@@ -33,15 +38,15 @@ public class SubDepartments {
 	@Column(length=30)
 	private String subDepartmentNames;
 	
-	@JsonIgnore
+/*
 	private Date createdAt;//timpStamp
 	
-	@JsonIgnore
+*/
 	@Column(length=30)
 	private String createdBy;//principal
 	
-	@JsonIgnore
-	@ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+	
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="depart_fk")
 	private Departments departments;
 

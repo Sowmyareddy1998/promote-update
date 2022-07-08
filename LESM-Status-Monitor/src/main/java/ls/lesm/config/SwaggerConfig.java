@@ -29,11 +29,11 @@ public class SwaggerConfig {
 	
      public static final String AUTHORIZATION_HEADER = "Authorization";
 	private ApiInfo apiInfo() {
-		return new ApiInfo("Life Line Health Care System",   //title
-				"ONLINE CONSULTATION", //description
+		return new ApiInfo("Lancesoft Employee Status Monitor",   //title
+				"EMPLOYEE TRACKER", //description
 				"LHS 1.0", //version
-				"https://www.lhs.com", //terms of service URL
-				new Contact("MG API", "https://github.com/umair8k", "Umairfaisal@lancesoft.com"), //developer contact info
+				"https://www.lesm.com", //terms of service URL
+				new Contact("lesm", "https://github.com/umair8k", "Umairfaisal@lancesoft.com"), //developer contact info
 				"lancesoft Pvt Ltd", //license
 				"https://lancesoft.com", //license URL
 				Collections.emptyList()	//vendor names as list

@@ -23,6 +23,6 @@ public class EmployeeType {
 	private Integer empTypeId;
 	
 	@Column(length=30)
-	private  String Types;
+	private  String typeName;
 
 }

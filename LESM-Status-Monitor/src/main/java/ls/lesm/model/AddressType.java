@@ -21,6 +21,6 @@ public class AddressType {
 	private Integer addTypeId;
 	
 	@Column(length=20)
-	private String addressType;
+	private String addType;
 	
 }

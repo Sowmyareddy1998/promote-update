@@ -26,5 +26,12 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(apiErorrs, HttpStatus.ALREADY_REPORTED); 
 		
 	}
+	
+	@ExceptionHandler(DateMissMatchException.class)
+	public ResponseEntity<?> dateMissMatchHandler(DateMissMatchException dmme, WebRequest webRequest){
+		ApiErorrs apiErorrs =new ApiErorrs(new Date(),dmme.getErrorMessage(), dmme.getErrorCode());
+		return new ResponseEntity<>(apiErorrs, HttpStatus.BAD_REQUEST); 
+		
+	}
 
 }

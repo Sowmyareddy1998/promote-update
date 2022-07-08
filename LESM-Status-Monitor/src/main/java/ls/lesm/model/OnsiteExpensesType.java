@@ -13,12 +13,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+//@RequiredArgsConstructor
 @ToString
 public class OnsiteExpensesType {
 	
@@ -26,6 +29,11 @@ public class OnsiteExpensesType {
 	@GeneratedValue(generator = "on_exptype_gen",strategy = GenerationType.AUTO)
 	private Integer expId;
 	
+	public OnsiteExpensesType(Integer expId) {
+		super();
+		this.expId = expId;
+	}
+
 	@Column(length=30)
 	private String expType;
 	
