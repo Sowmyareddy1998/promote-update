@@ -20,6 +20,7 @@ import ls.lesm.model.Address;
 import ls.lesm.model.EmployeesAtClientsDetails;
 import ls.lesm.model.MasterEmployeeDetails;
 import ls.lesm.model.SubDepartments;
+import ls.lesm.payload.request.EmpClientDetailsRequest;
 import ls.lesm.repository.ClientsRepository;
 import ls.lesm.repository.DepartmentsRepository;
 import ls.lesm.repository.DesignationsRepository;
@@ -95,6 +96,7 @@ public class EmployeeController {
 	public ResponseEntity<?> insertEmpAtClient(@RequestParam int empId,
                                                @RequestParam int clientId,
                                                @RequestBody EmployeesAtClientsDetails clientDetails,
+                                               EmpClientDetailsRequest req,
                                                Principal principal){
 		this.masterEmployeeDetailsRepository.findById(empId).map(id->{
 			clientDetails.setMasterEmployeeDetails(id);
@@ -104,7 +106,7 @@ public class EmployeeController {
 			clientDetails.setClients(cId);
 			return cId;
 		});
-		this.employeeDetailsService.insertClientsDetails(clientDetails, principal);
+		this.employeeDetailsService.insertClientsDetails(clientDetails, principal, req);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 }
 

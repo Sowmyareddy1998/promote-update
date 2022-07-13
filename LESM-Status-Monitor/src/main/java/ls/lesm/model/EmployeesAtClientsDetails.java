@@ -40,9 +40,9 @@ public class EmployeesAtClientsDetails {
 	
 	@Column(length=30)
 	private String desgAtClient;
-	@Transient
-	private Long clientTenure;// toatl months at client(posdate to poedate)
-	private Double totalEarningAtClients;// clientTenure*cliendt salary
+	
+	//private Long clientTenure;// toatl months at client(posdate to poedate)
+	//private Double totalEarningAtClients;// clientTenure*cliendt salary
 	
 	@JsonIgnore
 	private Date createdAt;//timpStamp

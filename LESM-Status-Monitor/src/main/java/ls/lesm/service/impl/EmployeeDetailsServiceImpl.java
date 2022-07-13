@@ -15,6 +15,7 @@ import ls.lesm.exception.DateMissMatchException;
 import ls.lesm.model.Address;
 import ls.lesm.model.EmployeesAtClientsDetails;
 import ls.lesm.model.MasterEmployeeDetails;
+import ls.lesm.payload.request.EmpClientDetailsRequest;
 import ls.lesm.repository.AddressRepositoy;
 import ls.lesm.repository.AddressTypeRepository;
 import ls.lesm.repository.DepartmentsRepository;
@@ -68,10 +69,13 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 
 	@Override
 	public EmployeesAtClientsDetails insertClientsDetails(EmployeesAtClientsDetails clientDetails,
-			Principal principal) {
-		clientDetails.setCreatedBy(principal.getName());
-		clientDetails.setCreatedAt(new Date());
-		LocalDate pos=clientDetails.getPOSdate().toInstant().atZone(ZoneId.systemDefault())
+			Principal principal,
+			EmpClientDetailsRequest empClientReq) {
+		
+		
+		empClientReq.setCreatedBy(principal.getName());
+		empClientReq.setCreatedAt(new Date());
+		LocalDate pos=empClientReq.getPOSdate().toInstant().atZone(ZoneId.systemDefault())
 				.toLocalDate();
 		/*LocalDate poe=clientDetails.getPOEdate().toInstant().atZone(ZoneId.systemDefault())
 				.toLocalDate();*/
@@ -79,7 +83,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 		//if(clientDetails.getPOEdate()==null) {
 		long tenureInMonth= ChronoUnit.MONTHS.between(pos,LocalDate.now());
 		
-		clientDetails.setClientTenure(tenureInMonth);
+		empClientReq.setClientTenure(tenureInMonth);
 		/*}
 		else {
 			Long tenureInMonth=ChronoUnit.MONTHS.between(pos,poe);
@@ -89,7 +93,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 			
 			clientDetails.setClientTenure(tenureInMonth);
 		}		*/
-		clientDetails.setTotalEarningAtClients(clientDetails.getClientSalary()*clientDetails.getClientTenure());
+		empClientReq.setTotalEarningAtClients(clientDetails.getClientSalary()*empClientReq.getClientTenure());
 		return employeesAtClientsDetailsRepository.save(clientDetails);
 	}
 	

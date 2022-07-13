@@ -77,7 +77,7 @@ public class AdminController {
 	
 	
 	@PostMapping("/create-roles")
-	public ResponseEntity<?> createRoles(@RequestBody RoleRepository role) {
+	public ResponseEntity<?> createRoles(@RequestBody RoleRequest role) {
 	
 		this.adminServiceImpl.createNewRole((RoleRequest) role);
 		return new ResponseEntity<Role>(HttpStatus.ACCEPTED);
