@@ -1,23 +1,25 @@
 package ls.lesm.service.impl;
 
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ls.lesm.exception.DateMissMatchException;
 import ls.lesm.model.Address;
-import ls.lesm.model.AddressType;
-import ls.lesm.model.Designations;
+import ls.lesm.model.EmployeesAtClientsDetails;
 import ls.lesm.model.MasterEmployeeDetails;
-import ls.lesm.payload.request.EmpDetailsRequest;
 import ls.lesm.repository.AddressRepositoy;
 import ls.lesm.repository.AddressTypeRepository;
 import ls.lesm.repository.DepartmentsRepository;
 import ls.lesm.repository.DesignationsRepository;
+import ls.lesm.repository.EmployeesAtClientsDetailsRepository;
 import ls.lesm.repository.MasterEmployeeDetailsRepository;
 import ls.lesm.repository.SubDepartmentsRepository;
 import ls.lesm.service.EmployeeDetailsService;
@@ -33,12 +35,18 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 	
 	@Autowired
 	private MasterEmployeeDetailsRepository masterEmployeeDetailsRepository;
+	
 	@Autowired
 	private DepartmentsRepository departmentsRepository;
+	
 	@Autowired
 	private SubDepartmentsRepository subDepartmentsRepositorye;
+	
 	@Autowired
 	private DesignationsRepository designationsRepository;
+	
+	@Autowired
+	private EmployeesAtClientsDetailsRepository employeesAtClientsDetailsRepository;
 	
 	@Override
 	public Address insertEmpAddress(Address address, Principal principal, Integer addTypeId) {
@@ -52,26 +60,37 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 	}
 
 	@Override
-	public MasterEmployeeDetails insetEmpDetails(MasterEmployeeDetails empDetails,  Principal principal, int req) {
+	public MasterEmployeeDetails insetEmpDetails(MasterEmployeeDetails empDetails,  Principal principal) {
 		empDetails.setCreatedBy(principal.getName());
-		/* this.designationsRepository.findById(req).map(desg->{
-			empDetails.setDesignations(desg);
-			return desg;
-		});
-		 this.subDepartmentsRepositorye.findById(req.getSubDepartId()).map(subD->{
-			 empDetails.setSubDepartments(subD);
-			 return subD;
-		 });*/
-		 this.masterEmployeeDetailsRepository.findById(req).map(sup->{
-			 empDetails.setMasterEmployeeDetails(sup);
-			 return sup;
-		 }).orElseThrow();
-	/*	 this.masterEmployeeDetailsRepository.findById(req.getVerticalId()).map(ver->{
-			 empDetails.setMasterEmployeeDetails(ver);
-			 return ver;
-		 });*/
-		 
+		
 		return this.masterEmployeeDetailsRepository.save(empDetails);
+	}
+
+	@Override
+	public EmployeesAtClientsDetails insertClientsDetails(EmployeesAtClientsDetails clientDetails,
+			Principal principal) {
+		clientDetails.setCreatedBy(principal.getName());
+		clientDetails.setCreatedAt(new Date());
+		LocalDate pos=clientDetails.getPOSdate().toInstant().atZone(ZoneId.systemDefault())
+				.toLocalDate();
+		/*LocalDate poe=clientDetails.getPOEdate().toInstant().atZone(ZoneId.systemDefault())
+				.toLocalDate();*/
+		
+		//if(clientDetails.getPOEdate()==null) {
+		long tenureInMonth= ChronoUnit.MONTHS.between(pos,LocalDate.now());
+		
+		clientDetails.setClientTenure(tenureInMonth);
+		/*}
+		else {
+			Long tenureInMonth=ChronoUnit.MONTHS.between(pos,poe);
+
+			if(clientDetails.getPOEdate().before(clientDetails.getPOSdate()))
+				throw new DateMissMatchException("PO end date can not be after Po start date","301");
+			
+			clientDetails.setClientTenure(tenureInMonth);
+		}		*/
+		clientDetails.setTotalEarningAtClients(clientDetails.getClientSalary()*clientDetails.getClientTenure());
+		return employeesAtClientsDetailsRepository.save(clientDetails);
 	}
 	
 	

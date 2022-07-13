@@ -4,6 +4,7 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -12,38 +13,40 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
 @ToString
 public class OnsiteBillExpenses {
 	
 	@Id
 	@GeneratedValue(generator = "site_bexp_gen",strategy = GenerationType.AUTO)
-	@NonNull
 	private Integer billExpId;
 	private Double cab;
 	private Double travel;
 	private Double accommodation;
 	private Double food;
+	
+	
 	private Date travelSDate;
+
 	private Date travelEDate;
 	
-	@Enumerated
+	@Enumerated(EnumType.STRING)
+	@Column(length=30)
 	private PaidStatus paidStatus;
 	
-	private Integer totalTravelDays;
+	private String totalTravelPeriod;
 	
 	@JsonIgnore
 	private Date createdAt;//timpStamp

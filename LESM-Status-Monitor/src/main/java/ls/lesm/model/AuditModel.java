@@ -1,7 +1,6 @@
 package ls.lesm.model;
 
 import java.io.Serializable;
-import java.security.Principal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -36,10 +35,16 @@ public abstract class AuditModel implements Serializable{
 	    @CreatedDate
 	    private Date createdAt;
 
-	  /*  @Temporal(TemporalType.TIMESTAMP)
+	    @Temporal(TemporalType.TIMESTAMP)
 	    @Column(name = "updated_at", nullable=true)
-	   // @LastModifiedDate*/
+	    @LastModifiedDate
 	    private Date updatedAt;
+	    
+	   /* @Getter(value = AccessLevel.NONE)
+	    @Setter(value = AccessLevel.NONE)
+	    Principal principal;
+	   
+	    private String createdBy=principal.getName();*/
 	    
 	   
 	   

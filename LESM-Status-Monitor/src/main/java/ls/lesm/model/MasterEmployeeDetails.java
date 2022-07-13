@@ -104,6 +104,9 @@ public class MasterEmployeeDetails extends AuditModel{
 	@JoinColumn(name="emp_type_fk")
 	private EmployeeType employeeType;
 	
+	//@ManyToOne(mappedBy="master_emp_details")
+	//private EmployeesAtClientsDetails employeesAtClientsDetails;
+	
 	
 
 }

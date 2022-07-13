@@ -33,5 +33,13 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(apiErorrs, HttpStatus.BAD_REQUEST); 
 		
 	}
+	
+	@ExceptionHandler(RelationNotFoundExceptions.class)
+	public ResponseEntity<?> duplicateEntryHandler(RelationNotFoundExceptions ex, WebRequest webRequest){
+		ApiErorrs apiErorrs =new ApiErorrs(new Date(),ex.getErrorMessage(), ex.getErrorCode());
+		return new ResponseEntity<>(apiErorrs, HttpStatus.NOT_FOUND); 
+		
+	}
+
 
 }

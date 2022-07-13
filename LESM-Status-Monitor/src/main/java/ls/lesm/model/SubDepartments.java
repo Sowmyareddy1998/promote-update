@@ -2,7 +2,6 @@ package  ls.lesm.model;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,8 +10,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,7 +27,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class SubDepartments extends AuditModel {
+public class SubDepartments  {
 	
 	/**
 	 * 
@@ -40,8 +43,19 @@ public class SubDepartments extends AuditModel {
 	
 /*
 	private Date createdAt;//timpStamp
-	
 */
+	    @Temporal(TemporalType.TIMESTAMP)
+	    @Column(name = "created_at", nullable = false, updatable = false)
+	    @CreatedDate
+	    @DateTimeFormat(pattern = "yyyy-MM-dd")
+	    private Date createdAt;
+
+	   /* @Temporal(TemporalType.TIMESTAMP)
+	    @Column(name = "updated_at", nullable=true,updatable = true )
+	    @LastModifiedDate
+	    @DateTimeFormat(pattern = "yyyy-MM-dd")*/
+	   // private Date updatedAt;
+	    
 	@Column(length=30)
 	private String createdBy;//principal
 	
