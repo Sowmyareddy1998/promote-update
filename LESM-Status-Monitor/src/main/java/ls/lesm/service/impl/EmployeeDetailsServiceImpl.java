@@ -2,19 +2,17 @@ package ls.lesm.service.impl;
 
 import java.security.Principal;
 import java.time.LocalDate;
-import java.time.Period;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ls.lesm.exception.DateMissMatchException;
+import ls.lesm.conveter.EmpAtClientToRequest;
 import ls.lesm.model.Address;
 import ls.lesm.model.EmployeesAtClientsDetails;
 import ls.lesm.model.MasterEmployeeDetails;
+import ls.lesm.payload.request.EmpClientDetailsRequest;
 import ls.lesm.repository.AddressRepositoy;
 import ls.lesm.repository.AddressTypeRepository;
 import ls.lesm.repository.DepartmentsRepository;
@@ -48,6 +46,9 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 	@Autowired
 	private EmployeesAtClientsDetailsRepository employeesAtClientsDetailsRepository;
 	
+	@Autowired
+	private EmpAtClientToRequest empAtClientToRequest;
+	
 	@Override
 	public Address insertEmpAddress(Address address, Principal principal, Integer addTypeId) {
 		address.setCreatedAt(new Date());
@@ -70,27 +71,20 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 	public EmployeesAtClientsDetails insertClientsDetails(EmployeesAtClientsDetails clientDetails,
 			Principal principal) {
 		clientDetails.setCreatedBy(principal.getName());
-		clientDetails.setCreatedAt(new Date());
-		LocalDate pos=clientDetails.getPOSdate().toInstant().atZone(ZoneId.systemDefault())
-				.toLocalDate();
-		/*LocalDate poe=clientDetails.getPOEdate().toInstant().atZone(ZoneId.systemDefault())
-				.toLocalDate();*/
+		clientDetails.setCreatedAt(LocalDate.now());
 		
-		//if(clientDetails.getPOEdate()==null) {
-		long tenureInMonth= ChronoUnit.MONTHS.between(pos,LocalDate.now());
-		
-		clientDetails.setClientTenure(tenureInMonth);
-		/*}
-		else {
-			Long tenureInMonth=ChronoUnit.MONTHS.between(pos,poe);
-
-			if(clientDetails.getPOEdate().before(clientDetails.getPOSdate()))
-				throw new DateMissMatchException("PO end date can not be after Po start date","301");
-			
-			clientDetails.setClientTenure(tenureInMonth);
-		}		*/
-		clientDetails.setTotalEarningAtClients(clientDetails.getClientSalary()*clientDetails.getClientTenure());
+		//if(clientDetails.getPOSdate().before(clientDetails.getPOEdate()))
+			//throw new DateMissMatchException("Po start date can not be before po end date","408");
 		return employeesAtClientsDetailsRepository.save(clientDetails);
+	}
+
+	@Override
+	public EmpClientDetailsRequest getEmpClinetDetails(EmployeesAtClientsDetails clientDetails,
+			                                              EmpClientDetailsRequest req) {
+		EmployeesAtClientsDetails empAtcleitn=empAtClientToRequest.reqToModel(req);
+		empAtcleitn=employeesAtClientsDetailsRepository.save(empAtcleitn);
+
+		return empAtClientToRequest.modelToReq(empAtcleitn);
 	}
 	
 	

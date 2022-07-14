@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ls.lesm.exception.DuplicateEntryException;
+import ls.lesm.exception.RelationNotFoundExceptions;
 import ls.lesm.model.AddressType;
 import ls.lesm.model.Clients;
 import ls.lesm.model.Departments;
@@ -86,12 +87,11 @@ public class ConstantFieldServiceImpl implements ConstantFieldService {
 		if(local!=null)
 			throw new DuplicateEntryException("103","This Sub-Department Already exist in database");
 		
-	    Optional<Object> opt=departmentsRepository.findById(departId).map(depart->{
+	    this.departmentsRepository.findById(departId).map(depart->{
 	    subDepart.setDepartments(depart);
-	    
+	    return depart;
+	    }).orElseThrow(()-> new RelationNotFoundExceptions("Department with this id "+departId+" not exist in data base","201")); 
 	    return subDepartmentsRepository.save(subDepart);
-	    });
-		return subDepart;
 	}
 
 	@Override

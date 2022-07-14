@@ -2,7 +2,7 @@ package  ls.lesm.model;
 
 
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,6 +14,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -33,32 +36,38 @@ public class EmployeesAtClientsDetails {
 	@GeneratedValue(generator = "emp_at_cdetails_gen",strategy = GenerationType.AUTO)
 	private Integer EmpAtClientId;
 	private Double clientSalary;
-	private Date POSdate;// purchase order start date
+	private LocalDate POSdate;// purchase order start date
 	
 	@Column(nullable=true)
-	private Date POEdate;// purchase order end date
+	private LocalDate POEdate;// purchase order end date
 	
 	@Column(length=30)
 	private String desgAtClient;
-	@Transient
-	private Long clientTenure;// toatl months at client(posdate to poedate)
-	private Double totalEarningAtClients;// clientTenure*cliendt salary
+	
+	//private Long clientTenure;// toatl months at client(posdate to poedate)
+	//private Double totalEarningAtClients;// clientTenure*cliendt salary
 	
 	@JsonIgnore
-	private Date createdAt;//timpStamp
+	private LocalDate createdAt;//timpStamp
 	
 	@JsonIgnore
 	@Column(length=30)
 	private String createdBy;//principal
 	
-	@JsonIgnore
+	//@JsonIgnore
+	@Fetch(FetchMode.JOIN) 
 	@OneToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name="emp_id_fk")
 	private MasterEmployeeDetails masterEmployeeDetails;
 	
-	@JsonIgnore
+	//@JsonIgnore
+	@Fetch(FetchMode.JOIN) 
 	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinColumn(name="clients_fk")
 	private Clients clients;
+	
+	
+	@Transient
+	private Long tenure;
 
 }

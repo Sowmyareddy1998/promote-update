@@ -40,6 +40,10 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(apiErorrs, HttpStatus.NOT_FOUND); 
 		
 	}
-
-
+	
+	@ExceptionHandler(RecordNotFoundException.class)
+	public ResponseEntity<?> notFoundHandler(RecordNotFoundException rnfe, WebRequest webRequest){
+		ApiErorrs apiErorrs =new ApiErorrs(new Date(),rnfe.getErrorMessage(), rnfe.getErrorCode());
+		return new ResponseEntity<>(apiErorrs, HttpStatus.NOT_FOUND); 
+	}
 }

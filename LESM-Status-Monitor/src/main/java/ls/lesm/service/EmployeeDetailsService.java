@@ -5,6 +5,7 @@ import java.security.Principal;
 import ls.lesm.model.Address;
 import ls.lesm.model.EmployeesAtClientsDetails;
 import ls.lesm.model.MasterEmployeeDetails;
+import ls.lesm.payload.request.EmpClientDetailsRequest;
 
 public interface EmployeeDetailsService {
 	
@@ -14,4 +15,5 @@ public interface EmployeeDetailsService {
 	
 	EmployeesAtClientsDetails insertClientsDetails(EmployeesAtClientsDetails clientDetails, Principal principal);
 
+	 EmpClientDetailsRequest getEmpClinetDetails(EmployeesAtClientsDetails clientDetails, EmpClientDetailsRequest req);
 }
