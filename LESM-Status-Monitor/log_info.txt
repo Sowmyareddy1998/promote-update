@@ -70,3 +70,7 @@
 2022-07-13 18:37:35.277  INFO 21176 --- [restartedMain] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
 2022-07-13 18:37:35.377  INFO 21176 --- [restartedMain] ls.lesm.LesmStatusMonitorApplication     : Started LesmStatusMonitorApplication in 1.262 seconds (JVM running for 3761.758)
 2022-07-13 18:37:35.378  INFO 21176 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2022-07-13 18:38:17.500  INFO 21176 --- [RMI TCP Connection(2)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2022-07-13 18:38:17.510  INFO 21176 --- [RMI TCP Connection(2)-127.0.0.1] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-07-13 18:38:17.510  INFO 21176 --- [RMI TCP Connection(2)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown initiated...
+2022-07-13 18:38:17.512  INFO 21176 --- [RMI TCP Connection(2)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown completed.
