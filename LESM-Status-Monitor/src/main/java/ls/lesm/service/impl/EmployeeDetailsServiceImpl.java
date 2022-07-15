@@ -1,4 +1,4 @@
-package ls.lesm.service.impl;
+	package ls.lesm.service.impl;
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -6,10 +6,14 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import ls.lesm.conveter.EmpAtClientToRequest;
+import ls.lesm.exception.RecordAlredyExistException;
 import ls.lesm.model.Address;
+import ls.lesm.model.EmployeeStatus;
 import ls.lesm.model.EmployeesAtClientsDetails;
 import ls.lesm.model.MasterEmployeeDetails;
 import ls.lesm.payload.request.EmpClientDetailsRequest;
@@ -63,6 +67,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 	@Override
 	public MasterEmployeeDetails insetEmpDetails(MasterEmployeeDetails empDetails,  Principal principal) {
 		empDetails.setCreatedBy(principal.getName());
+		empDetails.setStatus(EmployeeStatus.BENCH);
 		
 		return this.masterEmployeeDetailsRepository.save(empDetails);
 	}
@@ -72,19 +77,24 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 			Principal principal) {
 		clientDetails.setCreatedBy(principal.getName());
 		clientDetails.setCreatedAt(LocalDate.now());
-		
+	    clientDetails.setEmpAtClientId(clientDetails.getEmpAtClientId());
 		//if(clientDetails.getPOSdate().before(clientDetails.getPOEdate()))
 			//throw new DateMissMatchException("Po start date can not be before po end date","408");
+		Optional<EmployeesAtClientsDetails> currentRecord=this.employeesAtClientsDetailsRepository.findById(clientDetails.getEmpAtClientId());
+		System.out.println("----------------"+currentRecord.get());
+		if(currentRecord.get().getMasterEmployeeDetails().getEmpId()==clientDetails.getMasterEmployeeDetails().getEmpId() && clientDetails.getPOEdate()==null)
+			throw new RecordAlredyExistException("This employee '"+currentRecord.get().getMasterEmployeeDetails().getEmpId()+"' alreday working with '"+currentRecord.get().getClients().getClientsNames()+"' this client please enter Po E date to register this employee","201");
+		else
 		return employeesAtClientsDetailsRepository.save(clientDetails);
 	}
 
 	@Override
-	public EmpClientDetailsRequest getEmpClinetDetails(EmployeesAtClientsDetails clientDetails,
-			                                              EmpClientDetailsRequest req) {
-		EmployeesAtClientsDetails empAtcleitn=empAtClientToRequest.reqToModel(req);
-		empAtcleitn=employeesAtClientsDetailsRepository.save(empAtcleitn);
+	public Page<EmployeesAtClientsDetails> getAllEmpClinetDetails(PageRequest pageReuquest) {
+		
+		
+		Page<EmployeesAtClientsDetails> list = employeesAtClientsDetailsRepository.findAll(pageReuquest);		
+		return  list;
 
-		return empAtClientToRequest.modelToReq(empAtcleitn);
 	}
 	
 	

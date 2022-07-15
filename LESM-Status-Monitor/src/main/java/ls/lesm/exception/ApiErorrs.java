@@ -13,5 +13,6 @@ public class ApiErorrs {
 	private Date timeStamp;
 	private String errormessage;
 	private String errorCode;
+	private String fieldName;
 
 }

@@ -3,15 +3,19 @@ package ls.lesm.restcontroller;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ls.lesm.exception.RecordNotFoundException;
 import ls.lesm.exception.RelationNotFoundExceptions;
 import ls.lesm.model.Address;
+import ls.lesm.model.EmployeeStatus;
 import ls.lesm.model.EmployeesAtClientsDetails;
 import ls.lesm.model.MasterEmployeeDetails;
 import ls.lesm.repository.ClientsRepository;
@@ -98,14 +103,16 @@ public class EmployeeController {
                                                @RequestParam int clientId,
                                                @RequestBody  EmployeesAtClientsDetails clientDetails,
                                                              Principal principal){
+		
 		this.masterEmployeeDetailsRepository.findById(empId).map(id->{
 			clientDetails.setMasterEmployeeDetails(id);
 			return id;
-		}).orElseThrow(()-> new RelationNotFoundExceptions("Employee with this id '" +empId+"' not exist","415"));
+		}).orElseThrow(()-> new RelationNotFoundExceptions("Employee with this id '" +empId+"' not exist","415",""));
 		this.clientsRepository.findById(clientId).map(cId->{
 			clientDetails.setClients(cId);
 			return cId;
-		}).orElseThrow(()-> new RelationNotFoundExceptions("this client with this id '"+clientId+"' not exist","416"));
+		}).orElseThrow(()-> new RelationNotFoundExceptions("this client with this id '"+clientId+"' not exist","416",""));
+		
 		this.employeeDetailsService.insertClientsDetails(clientDetails, principal);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 }
@@ -116,22 +123,82 @@ public class EmployeeController {
 	public ResponseEntity<List<EmployeesAtClientsDetails>> allEmpDetailsAtClient(){
 		
 		List<EmployeesAtClientsDetails> all=this.employeesAtClientsDetailsRepository.findAll();
+		
 		return new ResponseEntity<List<EmployeesAtClientsDetails>>(all, HttpStatus.OK);
 	}
 	
-	@GetMapping("/get-allss/{id}")
-	public ResponseEntity<EmployeesAtClientsDetails> getAllDetailsOfEmpAtClient(@RequestParam int id){
+	@GetMapping("/get-details-byId/{id}")
+	public ResponseEntity<EmployeesAtClientsDetails> getDetailsOfEmpAtClientById(@RequestParam int id){
 		
 		EmployeesAtClientsDetails clientDetails=employeesAtClientsDetailsRepository.findById(id).orElseThrow(()->
 		new RecordNotFoundException("Client Details with this id '"+id+"' not exist in database","51"));
 		
-		if(clientDetails.getPOEdate()==null)
+	
+		Optional<MasterEmployeeDetails> employee=this.masterEmployeeDetailsRepository.findById(clientDetails.getMasterEmployeeDetails().getEmpId());
+		if(clientDetails.getPOEdate()==null) {
 		clientDetails.setTenure(ChronoUnit.MONTHS.between(clientDetails.getPOSdate(), LocalDate.now()));
+		
+		employee.get().setStatus(EmployeeStatus.ACTIVE);
+		masterEmployeeDetailsRepository.save(employee.get());
+		}
 		else 
+			employee.get().setStatus(EmployeeStatus.BENCH);
+		
 			clientDetails.setTenure(ChronoUnit.MONTHS.between(clientDetails.getPOSdate(), clientDetails.getPOEdate()));
 		
-		//this.employeesAtClientsDetailsRepository.save(al.get());
+		clientDetails.setTotalEarningAtclient(clientDetails.getClientSalary()*clientDetails.getTenure());
+		this.employeesAtClientsDetailsRepository.save(clientDetails);
 		return new ResponseEntity<EmployeesAtClientsDetails>(clientDetails,HttpStatus.ACCEPTED);
+	}
+	
+	@GetMapping("/getAll-detail-empAtClient")
+	public ResponseEntity<Map<String, Object>> getAllDetailsOfEmpAtClient(
+			@RequestParam(value="pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+			@RequestParam(value="pageSize", defaultValue="10", required=false)Integer pageSize){
+		
+		try {
+			Page<EmployeesAtClientsDetails> clientDetails=
+					
+					
+				employeeDetailsService.getAllEmpClinetDetails(PageRequest.of(pageNumber, pageSize));
+			Map<String, Object> response = new HashMap<>();
+			List<EmployeesAtClientsDetails> allEmployee=clientDetails.getContent();
+			response.put("User", allEmployee);
+			response.put("currentPage", clientDetails.getNumber());
+			response.put("totalItems", clientDetails.getTotalElements());
+			response.put("totalPages", clientDetails.getTotalPages());
+			List<EmployeesAtClientsDetails> deatils=allEmployee;
+			List<Integer> bdId=deatils.stream().map(EmployeesAtClientsDetails::getEmpAtClientId).collect(Collectors.toList());
+			List<EmployeesAtClientsDetails> clientDetailsAll=employeesAtClientsDetailsRepository.findAllById(bdId);
+			//System.out.println("======"+bdId);
+
+		      
+			//for(int i=0; i<=clientDetailsAll.size(); i++) {
+				for(EmployeesAtClientsDetails i: clientDetailsAll) {
+					
+				Optional<EmployeesAtClientsDetails> currentRecord=employeesAtClientsDetailsRepository.findById(i.getEmpAtClientId());
+				Optional<MasterEmployeeDetails> employee=this.masterEmployeeDetailsRepository.findById(currentRecord.get().getMasterEmployeeDetails().getEmpId()); 
+				System.out.println("========="+currentRecord);
+				System.out.println("===++++++++++++++++++++++++++++===="+employee);
+				if(currentRecord.get().getPOEdate()==null) {
+					currentRecord.get().setTenure(ChronoUnit.MONTHS.between(currentRecord.get().getPOSdate(), LocalDate.now()));
+					employee.get().setStatus(EmployeeStatus.ACTIVE);
+					this.masterEmployeeDetailsRepository.save(employee.get());
+				}
+				else {
+					employee.get().setStatus(EmployeeStatus.BENCH);
+				this.masterEmployeeDetailsRepository.save(employee.get());
+				currentRecord.get().setTenure(ChronoUnit.MONTHS.between(currentRecord.get().getPOSdate(), currentRecord.get().getPOEdate()));
+				}
+				currentRecord.get().setTotalEarningAtclient(currentRecord.get().getClientSalary()*currentRecord.get().getTenure());
+				this.employeesAtClientsDetailsRepository.save(currentRecord.get());
+			}
+			
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 }

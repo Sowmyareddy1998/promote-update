@@ -2,6 +2,9 @@ package ls.lesm.service;
 
 import java.security.Principal;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+
 import ls.lesm.model.Address;
 import ls.lesm.model.EmployeesAtClientsDetails;
 import ls.lesm.model.MasterEmployeeDetails;
@@ -15,5 +18,5 @@ public interface EmployeeDetailsService {
 	
 	EmployeesAtClientsDetails insertClientsDetails(EmployeesAtClientsDetails clientDetails, Principal principal);
 
-	 EmpClientDetailsRequest getEmpClinetDetails(EmployeesAtClientsDetails clientDetails, EmpClientDetailsRequest req);
+	Page<EmployeesAtClientsDetails> getAllEmpClinetDetails(PageRequest pageReuquest);
 }

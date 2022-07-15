@@ -54,14 +54,14 @@ public class EmployeesAtClientsDetails {
 	@Column(length=30)
 	private String createdBy;//principal
 	
-	//@JsonIgnore
-	@Fetch(FetchMode.JOIN) 
+	@JsonIgnore
+	//@Fetch(FetchMode.JOIN) 
 	@OneToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name="emp_id_fk")
 	private MasterEmployeeDetails masterEmployeeDetails;
 	
-	//@JsonIgnore
-	@Fetch(FetchMode.JOIN) 
+	@JsonIgnore
+	//@Fetch(FetchMode.JOIN) 
 	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinColumn(name="clients_fk")
 	private Clients clients;
@@ -69,5 +69,8 @@ public class EmployeesAtClientsDetails {
 	
 	@Transient
 	private Long tenure;
+	
+	
+	private Double totalEarningAtclient;
 
 }
