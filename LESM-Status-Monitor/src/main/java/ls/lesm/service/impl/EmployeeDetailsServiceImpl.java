@@ -3,6 +3,7 @@
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,6 @@ import ls.lesm.model.Address;
 import ls.lesm.model.EmployeeStatus;
 import ls.lesm.model.EmployeesAtClientsDetails;
 import ls.lesm.model.MasterEmployeeDetails;
-import ls.lesm.payload.request.EmpClientDetailsRequest;
 import ls.lesm.repository.AddressRepositoy;
 import ls.lesm.repository.AddressTypeRepository;
 import ls.lesm.repository.DepartmentsRepository;
@@ -59,16 +59,15 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 		address.setCreatedBy(principal.getName());
 		Optional<Object> optional=addressTypeRepository.findById(addTypeId).map(type->{
 		address.setAdressType(type);
-		return addressRepositoy.save(address);
+		return type;
 		});
-		return address;
+		return addressRepositoy.save(address);
 	}
 
 	@Override
 	public MasterEmployeeDetails insetEmpDetails(MasterEmployeeDetails empDetails,  Principal principal) {
 		empDetails.setCreatedBy(principal.getName());
 		empDetails.setStatus(EmployeeStatus.BENCH);
-		
 		return this.masterEmployeeDetailsRepository.save(empDetails);
 	}
 
@@ -77,14 +76,11 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 			Principal principal) {
 		clientDetails.setCreatedBy(principal.getName());
 		clientDetails.setCreatedAt(LocalDate.now());
-	    clientDetails.setEmpAtClientId(clientDetails.getEmpAtClientId());
+	 
 		//if(clientDetails.getPOSdate().before(clientDetails.getPOEdate()))
 			//throw new DateMissMatchException("Po start date can not be before po end date","408");
-		Optional<EmployeesAtClientsDetails> currentRecord=this.employeesAtClientsDetailsRepository.findById(clientDetails.getEmpAtClientId());
-		System.out.println("----------------"+currentRecord.get());
-		if(currentRecord.get().getMasterEmployeeDetails().getEmpId()==clientDetails.getMasterEmployeeDetails().getEmpId() && clientDetails.getPOEdate()==null)
-			throw new RecordAlredyExistException("This employee '"+currentRecord.get().getMasterEmployeeDetails().getEmpId()+"' alreday working with '"+currentRecord.get().getClients().getClientsNames()+"' this client please enter Po E date to register this employee","201");
-		else
+		
+			
 		return employeesAtClientsDetailsRepository.save(clientDetails);
 	}
 

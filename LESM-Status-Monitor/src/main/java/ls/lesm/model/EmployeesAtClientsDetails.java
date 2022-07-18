@@ -2,6 +2,7 @@ package  ls.lesm.model;
 
 
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import javax.persistence.CascadeType;
@@ -12,13 +13,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,7 +29,13 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class EmployeesAtClientsDetails {
+
+public class EmployeesAtClientsDetails implements Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(generator = "emp_at_cdetails_gen",strategy = GenerationType.AUTO)
@@ -54,22 +59,23 @@ public class EmployeesAtClientsDetails {
 	@Column(length=30)
 	private String createdBy;//principal
 	
-	@JsonIgnore
+	//@JsonIgnore
 	//@Fetch(FetchMode.JOIN) 
-	@OneToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@JsonIgnoreProperties({"hibernateLazyInitializer"})
+	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name="emp_id_fk")
 	private MasterEmployeeDetails masterEmployeeDetails;
 	
-	@JsonIgnore
+	//@JsonIgnore
 	//@Fetch(FetchMode.JOIN) 
-	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@JsonIgnoreProperties({"hibernateLazyInitializer"})
+	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinColumn(name="clients_fk")
 	private Clients clients;
 	
 	
 	@Transient
 	private Long tenure;
-	
 	
 	private Double totalEarningAtclient;
 

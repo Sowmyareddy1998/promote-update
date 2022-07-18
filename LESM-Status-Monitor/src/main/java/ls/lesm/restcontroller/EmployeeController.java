@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ls.lesm.exception.RecordAlredyExistException;
 import ls.lesm.exception.RecordNotFoundException;
 import ls.lesm.exception.RelationNotFoundExceptions;
 import ls.lesm.model.Address;
@@ -70,29 +71,31 @@ public class EmployeeController {
 	
 
 	@PostMapping("/insert-emp-details")
-	public ResponseEntity<?> empDetailsInsertion(@RequestParam int desgId,
-			                                     @RequestParam int subDepartId,
-			                                     @RequestParam int supVId,
-			                                     @RequestParam int empTypeId,
+	public ResponseEntity<?> empDetailsInsertion(@RequestParam(required=false) Integer subVId,
+			                                     @RequestParam(required=false) Integer departId,
+			                                     @RequestParam(required=false) Integer subDepartId,
+			                                     @RequestParam(required=false) Integer desgId,
 			                                     @RequestBody MasterEmployeeDetails empDetails,
 			                                                  Principal principal ){
-		 this.designationsRepository.findById(desgId).map(desg->{
-				empDetails.setDesignations(desg);
-				return desg;
-			});
-			 this.subDepartmentsRepositorye.findById(subDepartId).map(subD->{
-				 empDetails.setSubDepartments(subD);
-				 return subD;
-			 });
-			 this.masterEmployeeDetailsRepository.findById(supVId).map(sup->{
-				 empDetails.setMasterEmployeeDetails(sup);
-				 return sup;
-			 });
-			 this.employeeTypeRepository.findById(empTypeId).map(type->{
-				 empDetails.setEmployeeType(type);
-				 return type;
-			 });
-			 
+		this.masterEmployeeDetailsRepository.findById(subVId).map(id->{
+			empDetails.setSupervisor(id);
+			return id;
+		});
+		
+		this.departmentsRepository.findById(departId).map(id->{
+			empDetails.setDepartments(id);
+			return id;
+		});
+		
+		this.subDepartmentsRepositorye.findById(subDepartId).map(id->{
+			empDetails.setSubDepartments(id);
+			return id;
+		});
+		this.designationsRepository.findById(desgId).map(id->{
+			empDetails.setDesignations(id);
+			return id;
+		});
+			
 		this.employeeDetailsService.insetEmpDetails(empDetails, principal);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 		
@@ -112,6 +115,17 @@ public class EmployeeController {
 			clientDetails.setClients(cId);
 			return cId;
 		}).orElseThrow(()-> new RelationNotFoundExceptions("this client with this id '"+clientId+"' not exist","416",""));
+		
+       /*   List<EmployeesAtClientsDetails> currentRecord=employeesAtClientsDetailsRepository.findAll();
+		
+		System.out.println("----------------"+currentRecord);
+		
+		if(currentRecord.get().getMasterEmployeeDetails().getEmpId()==clientDetails.getMasterEmployeeDetails().getEmpId() && clientDetails.getPOEdate()==null) {
+			throw new RecordAlredyExistException("This employee '"+currentRecord.get().getMasterEmployeeDetails().getEmpId()+"' alreday working with '"+
+		                                          currentRecord.get().getClients().getClientsNames()
+		                                          +"' this client please enter Po E date to register this employee","201");
+		
+		}*/
 		
 		this.employeeDetailsService.insertClientsDetails(clientDetails, principal);
 		return new ResponseEntity<>(HttpStatus.CREATED);
@@ -157,10 +171,7 @@ public class EmployeeController {
 			@RequestParam(value="pageSize", defaultValue="10", required=false)Integer pageSize){
 		
 		try {
-			Page<EmployeesAtClientsDetails> clientDetails=
-					
-					
-				employeeDetailsService.getAllEmpClinetDetails(PageRequest.of(pageNumber, pageSize));
+			Page<EmployeesAtClientsDetails> clientDetails=employeeDetailsService.getAllEmpClinetDetails(PageRequest.of(pageNumber, pageSize));
 			Map<String, Object> response = new HashMap<>();
 			List<EmployeesAtClientsDetails> allEmployee=clientDetails.getContent();
 			response.put("User", allEmployee);
@@ -170,16 +181,12 @@ public class EmployeeController {
 			List<EmployeesAtClientsDetails> deatils=allEmployee;
 			List<Integer> bdId=deatils.stream().map(EmployeesAtClientsDetails::getEmpAtClientId).collect(Collectors.toList());
 			List<EmployeesAtClientsDetails> clientDetailsAll=employeesAtClientsDetailsRepository.findAllById(bdId);
-			//System.out.println("======"+bdId);
-
-		      
+			  
 			//for(int i=0; i<=clientDetailsAll.size(); i++) {
 				for(EmployeesAtClientsDetails i: clientDetailsAll) {
 					
 				Optional<EmployeesAtClientsDetails> currentRecord=employeesAtClientsDetailsRepository.findById(i.getEmpAtClientId());
 				Optional<MasterEmployeeDetails> employee=this.masterEmployeeDetailsRepository.findById(currentRecord.get().getMasterEmployeeDetails().getEmpId()); 
-				System.out.println("========="+currentRecord);
-				System.out.println("===++++++++++++++++++++++++++++===="+employee);
 				if(currentRecord.get().getPOEdate()==null) {
 					currentRecord.get().setTenure(ChronoUnit.MONTHS.between(currentRecord.get().getPOSdate(), LocalDate.now()));
 					employee.get().setStatus(EmployeeStatus.ACTIVE);
@@ -199,6 +206,13 @@ public class EmployeeController {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+	
+	public ResponseEntity<List<MasterEmployeeDetails>> getEmpById(@RequestParam int id){
+		
+		this.masterEmployeeDetailsRepository.findById(id);
+		return null;
+		
 	}
 	
 }
