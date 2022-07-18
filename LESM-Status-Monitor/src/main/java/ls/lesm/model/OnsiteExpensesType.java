@@ -28,11 +28,6 @@ public class OnsiteExpensesType {
 	@Id
 	@GeneratedValue(generator = "on_exptype_gen",strategy = GenerationType.AUTO)
 	private Integer expId;
-	
-	public OnsiteExpensesType(Integer expId) {
-		super();
-		this.expId = expId;
-	}
 
 	@Column(length=30)
 	private String expType;

@@ -1,7 +1,7 @@
 package  ls.lesm.model;
 
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -49,9 +50,9 @@ public class MasterEmployeeDetails extends AuditModel{
 	@Column(length=30)
 	private String lastName;
 	
-	private Date joiningDate;
+	private LocalDate joiningDate;
 	
-	private Date DOB;
+	private LocalDate DOB;
 	
 	@Column(length=30)
 	private String Location;
@@ -71,17 +72,23 @@ public class MasterEmployeeDetails extends AuditModel{
 	private Long phoneNo;
 	
 	private String createdBy;
-	@JsonIgnore
-	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	//@JsonIgnore
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="sub_depart_fk")
 	private SubDepartments subDepartments;
-	@JsonIgnore
+	
+	
+//	@JsonIgnore
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="department_fk")
 	private Departments departments;
 	
-	@JsonIgnore
-	@ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
+//	@JsonIgnore
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="Desg_fk")
 	private Designations designations;
 	
@@ -90,22 +97,24 @@ public class MasterEmployeeDetails extends AuditModel{
 	joinColumns=@JoinColumn (name="emp_id"),
 	inverseJoinColumns =@JoinColumn(name="supervisor_id"))
 	private MasterEmployeeDetails masterEmployeeDetails;*/
-	@JsonIgnore
-	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	@JoinColumn(name="supervisor_fk")
-	private MasterEmployeeDetails masterEmployeeDetails;
 	
-	@JsonIgnore
+	
+	//@JsonIgnore
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="supervisor_fk")
+	private MasterEmployeeDetails supervisor;
+	
+/*	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
+	//@JsonIgnore
 	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name="verticle_fk")
-	private MasterEmployeeDetails verticle;
-	@JsonIgnore
-	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	private MasterEmployeeDetails verticle;*/
+	
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
+	//@JsonIgnore
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="emp_type_fk")
 	private EmployeeType employeeType;
-	
-	//@ManyToOne(mappedBy="master_emp_details")
-	//private EmployeesAtClientsDetails employeesAtClientsDetails;
 	
 	
 

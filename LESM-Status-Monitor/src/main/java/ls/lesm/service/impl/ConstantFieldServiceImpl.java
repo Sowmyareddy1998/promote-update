@@ -90,7 +90,7 @@ public class ConstantFieldServiceImpl implements ConstantFieldService {
 	    this.departmentsRepository.findById(departId).map(depart->{
 	    subDepart.setDepartments(depart);
 	    return depart;
-	    }).orElseThrow(()-> new RelationNotFoundExceptions("Department with this id "+departId+" not exist in data base","201")); 
+	    }).orElseThrow(()-> new RelationNotFoundExceptions("Department with this id "+departId+" not exist in data base","201","")); 
 	    return subDepartmentsRepository.save(subDepart);
 	}
 

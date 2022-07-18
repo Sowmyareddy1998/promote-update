@@ -53,13 +53,13 @@ public class ExpenseServiceImpl implements ExpenseService {
 		this.onsiteExpensesTypeRepository.findById(expTypeId).map(bill->{
 			billExp.setOnsiteExpensesType(bill);
 			return bill;
-		}).orElseThrow(()-> new RelationNotFoundExceptions("This expense Type with this id "+empId+" Not exist","501"));
+		}).orElseThrow(()-> new RelationNotFoundExceptions("This expense Type with this id "+empId+" Not exist","501",""));
 		
 		Optional<Object> obj =Optional.ofNullable(masterEmployeeDetailsRepository.findById(empId).map(id->{
 			billExp.setMasterEmployeeDetails(id);
 			return id;
 			
-		}).orElseThrow(()-> new RelationNotFoundExceptions("This employee with this id "+empId+" Not exist","502")));
+		}).orElseThrow(()-> new RelationNotFoundExceptions("This employee with this id "+empId+" Not exist","502","empId: "+empId)));
 		
 		
 		return onsiteBillExpensesRepository.save(billExp);

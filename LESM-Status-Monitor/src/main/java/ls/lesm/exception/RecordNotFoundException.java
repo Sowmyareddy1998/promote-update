@@ -10,13 +10,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Component
-public class RelationNotFoundExceptions extends RuntimeException{
+public class RecordNotFoundException extends RuntimeException{
 
 	private static final long serialVersionUID = 1L;
 	
 	String errorMessage;
 	String errorCode;
-	String fieldName;
 	
 
 }
