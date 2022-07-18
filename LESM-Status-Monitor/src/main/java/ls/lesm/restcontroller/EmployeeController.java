@@ -116,4 +116,10 @@ public class EmployeeController {
 		List<EmployeesAtClientsDetails> all=this.employeesAtClientsDetailsRepository.findAll();
 		return new ResponseEntity<List<EmployeesAtClientsDetails>>(all, HttpStatus.OK);
 	}
+	
+	@GetMapping("/alll")
+	public ResponseEntity<List<Object[]>> allDetails(){
+	List<Object[]> all=	this.employeesAtClientsDetailsRepository.getMeAll();
+		return new ResponseEntity<List<Object[]>>(all, HttpStatus.OK);
+	}
 }
