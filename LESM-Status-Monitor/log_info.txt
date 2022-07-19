@@ -2022,3 +2022,7 @@ org.springframework.core.convert.ConverterNotFoundException: No converter found 
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) ~[tomcat-embed-core-9.0.64.jar:9.0.64]
 	at java.base/java.lang.Thread.run(Thread.java:832) ~[na:na]
 
+2022-07-19 00:30:33.297  INFO 9140 --- [RMI TCP Connection(2)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2022-07-19 00:30:33.337  INFO 9140 --- [RMI TCP Connection(2)-127.0.0.1] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-07-19 00:30:33.338  INFO 9140 --- [RMI TCP Connection(2)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-24 - Shutdown initiated...
+2022-07-19 00:30:33.348  INFO 9140 --- [RMI TCP Connection(2)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-24 - Shutdown completed.
