@@ -63,7 +63,6 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 	public MasterEmployeeDetails insetEmpDetails(MasterEmployeeDetails empDetails,  Principal principal) {
 		empDetails.setCreatedBy(principal.getName());
 		empDetails.setStatus(EmployeeStatus.BENCH);
-		
 		return this.masterEmployeeDetailsRepository.save(empDetails);
 	}
 

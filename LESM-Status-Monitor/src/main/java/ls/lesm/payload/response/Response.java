@@ -6,5 +6,7 @@ public interface Response {
 	 String getDesgAtClient();
 	 String getClientsNames();
 	 String getEmployeeId();
+	 String getFirstName();
+	 String getLocation();
 
 }

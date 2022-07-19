@@ -12,7 +12,8 @@ import ls.lesm.payload.response.Response;
 @Repository
 @Transactional
 public interface EmployeesAtClientsDetailsRepository extends JpaRepository<EmployeesAtClientsDetails, Integer> {
-	@Query(nativeQuery = true, value="Select employees_at_clients_details.emp_at_client_id AS empAtClientId,employees_at_clients_details.desg_at_client AS desgAtClient, clients.clients_names AS clientsNames, master_emp_details.employee_id AS employeeId"
+	@Query(nativeQuery = true, value="Select employees_at_clients_details.emp_at_client_id AS empAtClientId,employees_at_clients_details.desg_at_client AS desgAtClient, "
+			+ "clients.clients_names AS clientsNames, master_emp_details.employee_id AS employeeId, master_emp_details.first_name AS firstName, master_emp_details.location AS location"
 			+ " FROM ("
 			+ "(employees_at_clients_details "
 			+ "INNER JOIN clients ON employees_at_clients_details.clients_fk=clients.clients_id)"
