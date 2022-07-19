@@ -1,11 +1,6 @@
 package ls.lesm.payload.request;
 
 import java.time.LocalDate;
-import java.util.Date;
-
-import javax.persistence.Column;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

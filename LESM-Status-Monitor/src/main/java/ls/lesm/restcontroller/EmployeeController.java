@@ -21,13 +21,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import ls.lesm.exception.RecordAlredyExistException;
 import ls.lesm.exception.RecordNotFoundException;
 import ls.lesm.exception.RelationNotFoundExceptions;
 import ls.lesm.model.Address;
 import ls.lesm.model.EmployeeStatus;
 import ls.lesm.model.EmployeesAtClientsDetails;
 import ls.lesm.model.MasterEmployeeDetails;
+import ls.lesm.payload.response.Response;
 import ls.lesm.repository.ClientsRepository;
 import ls.lesm.repository.DepartmentsRepository;
 import ls.lesm.repository.DesignationsRepository;
@@ -75,6 +75,7 @@ public class EmployeeController {
 			                                     @RequestParam(required=false) Integer departId,
 			                                     @RequestParam(required=false) Integer subDepartId,
 			                                     @RequestParam(required=false) Integer desgId,
+			                                     @RequestParam(required=false, defaultValue ="0") Integer typeId,
 			                                     @RequestBody MasterEmployeeDetails empDetails,
 			                                                  Principal principal ){
 		this.masterEmployeeDetailsRepository.findById(subVId).map(id->{
@@ -95,7 +96,10 @@ public class EmployeeController {
 			empDetails.setDesignations(id);
 			return id;
 		});
-			
+		this.employeeTypeRepository.findById(typeId).map(id->{
+			empDetails.setEmployeeType(id);
+			return id;
+		});		
 		this.employeeDetailsService.insetEmpDetails(empDetails, principal);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 		
@@ -126,6 +130,7 @@ public class EmployeeController {
 		                                          +"' this client please enter Po E date to register this employee","201");
 		
 		}*/
+	
 		
 		this.employeeDetailsService.insertClientsDetails(clientDetails, principal);
 		return new ResponseEntity<>(HttpStatus.CREATED);
@@ -141,6 +146,7 @@ public class EmployeeController {
 		return new ResponseEntity<List<EmployeesAtClientsDetails>>(all, HttpStatus.OK);
 	}
 	
+
 	@GetMapping("/get-details-byId/{id}")
 	public ResponseEntity<EmployeesAtClientsDetails> getDetailsOfEmpAtClientById(@RequestParam int id){
 		
@@ -207,12 +213,14 @@ public class EmployeeController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	@GetMapping("/getingAll")
+	public ResponseEntity<List<Response>> getEmpById(){
+		
+		 List<Response>all= this.employeesAtClientsDetailsRepository.findDataResponseAll();
+		 
+		return new ResponseEntity<List<Response>>(all,HttpStatus.OK); 
 	
-	public ResponseEntity<List<MasterEmployeeDetails>> getEmpById(@RequestParam int id){
-		
-		this.masterEmployeeDetailsRepository.findById(id);
-		return null;
-		
 	}
 	
+
 }
