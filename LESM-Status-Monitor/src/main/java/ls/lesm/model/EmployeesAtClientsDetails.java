@@ -15,7 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Transient;
 
@@ -79,17 +79,17 @@ public class EmployeesAtClientsDetails implements Serializable {
 	@Column(length=30)
 	private String createdBy;//principal
 	
-	//@JsonIgnore
+	@JsonIgnore
 	//@Fetch(FetchMode.JOIN) 
 	@JsonIgnoreProperties({"hibernateLazyInitializer"})
-	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@OneToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name="emp_id_fk")
 	private MasterEmployeeDetails masterEmployeeDetails;
 	
-	//@JsonIgnore
+	@JsonIgnore
 	//@Fetch(FetchMode.JOIN) 
 	@JsonIgnoreProperties({"hibernateLazyInitializer"})
-	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinColumn(name="clients_fk")
 	private Clients clients;
 	

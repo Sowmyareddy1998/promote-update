@@ -73,6 +73,8 @@ public class MasterEmployeeDetails extends AuditModel{
 	
 	private String createdBy;
 	
+	private LocalDate exitAt;
+	
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	//@JsonIgnore
 	@ManyToOne(fetch=FetchType.LAZY)
