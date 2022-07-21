@@ -9,14 +9,19 @@ import ls.lesm.model.Address;
 import ls.lesm.model.EmployeesAtClientsDetails;
 import ls.lesm.model.MasterEmployeeDetails;
 import ls.lesm.payload.request.EmpClientDetailsRequest;
+import ls.lesm.payload.request.EmployeeDetailsRequest;
 
 public interface EmployeeDetailsService {
 	
 	Address insertEmpAddress(Address address, Principal principal, Integer addTypeId);
 	
-	MasterEmployeeDetails insetEmpDetails(MasterEmployeeDetails empDetails, Principal principal );
+	EmployeeDetailsRequest insetEmpDetails(EmployeeDetailsRequest empReq, Principal principal );
 	
 	EmployeesAtClientsDetails insertClientsDetails(EmployeesAtClientsDetails clientDetails, Principal principal);
 
 	Page<EmployeesAtClientsDetails> getAllEmpClinetDetails(PageRequest pageReuquest);
+	
+	
+
+	
 }

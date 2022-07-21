@@ -1,6 +1,6 @@
 package ls.lesm.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,7 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -30,17 +30,18 @@ public class Salary {
 	@Id
 	@GeneratedValue(generator = "sal_gen",strategy = GenerationType.AUTO)
 	private Integer salId;
-	private Boolean isLatest;// 0 old salary; 1 new salary
+	//private Boolean isLatest;// 0 old salary; 1 new salary
 	private Double salary;
 	
 	@JsonIgnore
-	private Date createdAt;
+	private LocalDate createdAt;
 	
 	@JsonIgnore
 	@Column(length=30)
 	private String createdBy;//principal
 	
-	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@JsonIgnore
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinColumn(name="emp_id_fk")
     private MasterEmployeeDetails masterEmployeeDetails;
 	

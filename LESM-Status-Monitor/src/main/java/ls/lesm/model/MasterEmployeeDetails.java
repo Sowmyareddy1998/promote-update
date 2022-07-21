@@ -41,8 +41,8 @@ public class MasterEmployeeDetails extends AuditModel{
 	@GeneratedValue(generator = "emp_id_gen",strategy = GenerationType.AUTO)
 	private Integer empId;// AutoInc Pk
 	
-	@Column(length=30)
-	private String employeeId;// lancesoft Id	
+	@Column(length=30,name="employee_id")
+	private String lancesoft;// lancesoft Id	
 	
 	@Column(length=30)
 	private String firstName;
@@ -76,20 +76,20 @@ public class MasterEmployeeDetails extends AuditModel{
 	private LocalDate exitAt;
 	
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-	//@JsonIgnore
+	@JsonIgnore
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="sub_depart_fk")
 	private SubDepartments subDepartments;
 	
 	
-//	@JsonIgnore
+	@JsonIgnore
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="department_fk")
 	private Departments departments;
 	
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
-//	@JsonIgnore
+	@JsonIgnore
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="Desg_fk")
 	private Designations designations;
@@ -101,8 +101,8 @@ public class MasterEmployeeDetails extends AuditModel{
 	private MasterEmployeeDetails masterEmployeeDetails;*/
 	
 	
-	//@JsonIgnore
-	@ManyToOne(fetch=FetchType.LAZY)
+	@JsonIgnore
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="supervisor_fk")
 	private MasterEmployeeDetails supervisor;
 	
@@ -113,7 +113,7 @@ public class MasterEmployeeDetails extends AuditModel{
 	private MasterEmployeeDetails verticle;*/
 	
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
-	//@JsonIgnore
+	@JsonIgnore
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="emp_type_fk")
 	private EmployeeType employeeType;

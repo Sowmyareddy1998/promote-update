@@ -1,7 +1,6 @@
 package ls.lesm;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -9,21 +8,29 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import ls.lesm.model.Role;
-import ls.lesm.model.User;
-import ls.lesm.model.UserRole;
+import ls.lesm.payload.response.ForeignkeyResponse;
+import ls.lesm.repository.AddressRepositoy;
 
 @SpringBootApplication
 public class LesmStatusMonitorApplication  implements CommandLineRunner {
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+	
 
 	public static void main(String[] args) {
 		SpringApplication.run(LesmStatusMonitorApplication.class, args);
-	}
+		
+	}	
+		
 	
 	@Override
 	public void run(String... args) throws Exception{
+		
+		
+		
+		
+		
 		/*System.out.println("execution start");
 		
 		User user=new User();

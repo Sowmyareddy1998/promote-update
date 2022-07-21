@@ -151,6 +151,16 @@ public class ConstantFieldServiceImpl implements ConstantFieldService {
 			this.addressTypeRepository.save(addType);
 		return addType;
 	}
+
+	@Override
+	public List<AddressType> getAllAddType() {
+		
+		return this.addressTypeRepository.findAll();
+	}
+
+	
+
+	
 	
 	
 }

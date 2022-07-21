@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,8 +28,11 @@ import ls.lesm.model.Address;
 import ls.lesm.model.EmployeeStatus;
 import ls.lesm.model.EmployeesAtClientsDetails;
 import ls.lesm.model.MasterEmployeeDetails;
+import ls.lesm.model.User;
+import ls.lesm.payload.request.EmployeeDetailsRequest;
 import ls.lesm.payload.response.EmployeeDetailsResponse;
 import ls.lesm.payload.response.Response;
+import ls.lesm.repository.AddressRepositoy;
 import ls.lesm.repository.ClientsRepository;
 import ls.lesm.repository.DepartmentsRepository;
 import ls.lesm.repository.DesignationsRepository;
@@ -36,14 +40,16 @@ import ls.lesm.repository.EmployeeTypeRepository;
 import ls.lesm.repository.EmployeesAtClientsDetailsRepository;
 import ls.lesm.repository.MasterEmployeeDetailsRepository;
 import ls.lesm.repository.SubDepartmentsRepository;
-import ls.lesm.service.EmployeeDetailsService;
+import ls.lesm.repository.UserRepository;
+import ls.lesm.service.impl.EmployeeDetailsServiceImpl;
 
 @RestController
 @RequestMapping("/api/v1/emp")
+@CrossOrigin("*")
 public class EmployeeController {
 	
 	@Autowired
-	private EmployeeDetailsService employeeDetailsService;
+	private EmployeeDetailsServiceImpl employeeDetailsService;
 	
 	
 	@Autowired
@@ -59,9 +65,15 @@ public class EmployeeController {
 	
 	@Autowired
 	private EmployeesAtClientsDetailsRepository employeesAtClientsDetailsRepository;
-	
+
 	@Autowired
 	private ClientsRepository clientsRepository;
+	
+	@Autowired
+	private AddressRepositoy addressRepositoy;
+	
+	@Autowired
+	private UserRepository userRepository;
 	
 	@PostMapping("/insert-address")
 	public ResponseEntity<?> adressFieldsInsertion(@RequestParam int addTypeId, @RequestBody Address address, Principal principal ){
@@ -77,31 +89,41 @@ public class EmployeeController {
 			                                     @RequestParam(required=false) Integer subDepartId,
 			                                     @RequestParam(required=false) Integer desgId,
 			                                     @RequestParam(required=false, defaultValue ="0") Integer typeId,
-			                                     @RequestBody MasterEmployeeDetails empDetails,
+			                                     @RequestParam Integer addressId,
+			                                     @RequestBody EmployeeDetailsRequest empReq,
+			                                   
 			                                                  Principal principal ){
 		this.masterEmployeeDetailsRepository.findById(subVId).map(id->{
-			empDetails.setSupervisor(id);
+			empReq.getMasterEmployeeDetails().setSupervisor(id);
 			return id;
 		});
 		
 		this.departmentsRepository.findById(departId).map(id->{
-			empDetails.setDepartments(id);
+			empReq.getMasterEmployeeDetails().setDepartments(id);
 			return id;
 		});
 		
 		this.subDepartmentsRepositorye.findById(subDepartId).map(id->{
-			empDetails.setSubDepartments(id);
+			empReq.getMasterEmployeeDetails().setSubDepartments(id);
 			return id;
 		});
 		this.designationsRepository.findById(desgId).map(id->{
-			empDetails.setDesignations(id);
+			empReq.getMasterEmployeeDetails().setDesignations(id);
 			return id;
 		});
 		this.employeeTypeRepository.findById(typeId).map(id->{
-			empDetails.setEmployeeType(id);
+			empReq.getMasterEmployeeDetails().setEmployeeType(id);
 			return id;
 		});		
-		this.employeeDetailsService.insetEmpDetails(empDetails, principal);
+		
+//		this.addressRepositoy.findById(addressId).map(id->{
+//			empReq.getAddress().setMasterEmployeeDetails(id);
+//			return id;		
+//		});
+		
+		
+		
+		this.employeeDetailsService.insetEmpDetails(empReq, principal);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 		
 	}
@@ -137,8 +159,6 @@ public class EmployeeController {
 		return new ResponseEntity<>(HttpStatus.CREATED);
 }
 	
-	
-
 	@GetMapping("/get-all")
 	public ResponseEntity<List<EmployeesAtClientsDetails>> allEmpDetailsAtClient(){
 		
@@ -146,7 +166,6 @@ public class EmployeeController {
 		
 		return new ResponseEntity<List<EmployeesAtClientsDetails>>(all, HttpStatus.OK);
 	}
-	
 
 	@GetMapping("/get-details-byId/{id}")
 	public ResponseEntity<EmployeesAtClientsDetails> getDetailsOfEmpAtClientById(@RequestParam int id){
@@ -154,7 +173,6 @@ public class EmployeeController {
 		EmployeesAtClientsDetails clientDetails=employeesAtClientsDetailsRepository.findById(id).orElseThrow(()->
 		new RecordNotFoundException("Client Details with this id '"+id+"' not exist in database","51"));
 		
-	
 		Optional<MasterEmployeeDetails> employee=this.masterEmployeeDetailsRepository.findById(clientDetails.getMasterEmployeeDetails().getEmpId());
 		if(clientDetails.getPOEdate()==null) {
 		clientDetails.setTenure(ChronoUnit.MONTHS.between(clientDetails.getPOSdate(), LocalDate.now()));
@@ -228,5 +246,23 @@ public class EmployeeController {
 		return new ResponseEntity<List<EmployeeDetailsResponse>>(all,HttpStatus.OK);
 	}
 	
+	@GetMapping("/address-by-id")
+	public ResponseEntity<List<Object[]>> findEmpAddById(@RequestParam int id){
+		List<Object[]> add= (List<Object[]>) this.addressRepositoy.findByEmpIdFk(id);
+		return new ResponseEntity<List<Object[]>>(add,HttpStatus.OK);
+	}
+	
+	@GetMapping("/getEmps")
+	public ResponseEntity<List<MasterEmployeeDetails>> getEmp( Principal principal){
+		
+		User loggedU=this.userRepository.findByUsername(principal.getName());
+		String id=loggedU.getUsername();
+		MasterEmployeeDetails employee=this.masterEmployeeDetailsRepository.findByLancesoft(id);
+		int dbPk=employee.getEmpId();
+		List<MasterEmployeeDetails> ls = masterEmployeeDetailsRepository.findBymasterEmployeeDetails_Id(dbPk);
+
+		return new ResponseEntity<List<MasterEmployeeDetails>>(ls,HttpStatus.OK);
+		
+	}
 
 }

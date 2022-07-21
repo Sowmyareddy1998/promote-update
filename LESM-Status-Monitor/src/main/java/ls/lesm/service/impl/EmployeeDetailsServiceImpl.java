@@ -14,6 +14,7 @@ import ls.lesm.model.Address;
 import ls.lesm.model.EmployeeStatus;
 import ls.lesm.model.EmployeesAtClientsDetails;
 import ls.lesm.model.MasterEmployeeDetails;
+import ls.lesm.payload.request.EmployeeDetailsRequest;
 import ls.lesm.repository.AddressRepositoy;
 import ls.lesm.repository.AddressTypeRepository;
 import ls.lesm.repository.DepartmentsRepository;
@@ -50,7 +51,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 		
 	@Override
 	public Address insertEmpAddress(Address address, Principal principal, Integer addTypeId) {
-		address.setCreatedAt(new Date());
+		address.setCreatedAt(LocalDate.now());
 		address.setCreatedBy(principal.getName());
 		Optional<Object> optional=addressTypeRepository.findById(addTypeId).map(type->{
 		address.setAdressType(type);
@@ -59,11 +60,19 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 		return addressRepositoy.save(address);
 	}
 
-	@Override
-	public MasterEmployeeDetails insetEmpDetails(MasterEmployeeDetails empDetails,  Principal principal) {
-		empDetails.setCreatedBy(principal.getName());
-		empDetails.setStatus(EmployeeStatus.BENCH);
-		return this.masterEmployeeDetailsRepository.save(empDetails);
+	
+	public EmployeeDetailsRequest insetEmpDetails(EmployeeDetailsRequest empDetails,  Principal principal) {
+		empDetails.getMasterEmployeeDetails().setCreatedBy(principal.getName());
+		empDetails.getMasterEmployeeDetails().setStatus(EmployeeStatus.BENCH);
+		
+		
+		empDetails.getEmployeesAtClientsDetails().setCreatedAt(LocalDate.now());
+		empDetails.getEmployeesAtClientsDetails().setCreatedBy(principal.getName());
+
+				this.masterEmployeeDetailsRepository.save(empDetails.getMasterEmployeeDetails());
+
+				this.employeesAtClientsDetailsRepository.save(empDetails.getEmployeesAtClientsDetails());
+				return empDetails;
 	}
 
 	@Override
@@ -87,6 +96,9 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 		return  list;
 
 	}
+
+
+	
 	
 	
 

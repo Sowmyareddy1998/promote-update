@@ -77,9 +77,9 @@ public class AdminController {
 	
 	
 	@PostMapping("/create-roles")
-	public ResponseEntity<?> createRoles(@RequestBody RoleRequest role) {
+	public ResponseEntity<?> createRoles(@RequestBody Role role) {
 	
-		this.adminServiceImpl.createNewRole((RoleRequest) role);
+		this.adminServiceImpl.createNewRole( role);
 		return new ResponseEntity<Role>(HttpStatus.ACCEPTED);
 		}
 
@@ -92,8 +92,8 @@ public class AdminController {
 	
 	@GetMapping("/all-roles")
 	public ResponseEntity<List<Role>> allRoles(){
-		List<Role> allroles= this.adminServiceImpl.getAllRole();
-		return new ResponseEntity<>(allroles, HttpStatus.ACCEPTED);
+		List<Role> allroles= this.roleRopository.findAll();
+		return new ResponseEntity<List<Role>>(allroles, HttpStatus.ACCEPTED);
 		
 	}
 
