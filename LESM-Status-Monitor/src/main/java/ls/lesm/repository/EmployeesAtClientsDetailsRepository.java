@@ -1,9 +1,11 @@
 package ls.lesm.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,5 +30,11 @@ public interface EmployeesAtClientsDetailsRepository extends JpaRepository<Emplo
 		 + "WHERE c.clientsNames=c.clientsNames")
 	public List<EmployeesAtClientsDetails> getDataaa();*/
 
+	@Query("FROM EmployeesAtClientsDetails g where g.masterEmployeeDetails.id = :masterEmployeeDetailsId")
+    List<EmployeesAtClientsDetails>  findsBymasterEmployeeDetails_Id(@Param("masterEmployeeDetailsId")Integer id);
+	
+	
+	@Query(" FROM EmployeesAtClientsDetails g where g.masterEmployeeDetails.id = :masterEmployeeDetailsId")
+	Optional<EmployeesAtClientsDetails>  findBymasterEmployeeDetails_Id(@Param("masterEmployeeDetailsId")Integer id);
 	
 }

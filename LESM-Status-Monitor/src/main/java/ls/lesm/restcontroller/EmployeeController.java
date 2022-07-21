@@ -14,14 +14,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.twilio.rest.api.v2010.account.AddressReader;
 
 import ls.lesm.exception.RecordNotFoundException;
 import ls.lesm.exception.RelationNotFoundExceptions;
@@ -43,6 +42,7 @@ import ls.lesm.service.EmployeeDetailsService;
 
 @RestController
 @RequestMapping("/api/v1/emp")
+@CrossOrigin("*")
 public class EmployeeController {
 	
 	@Autowired
@@ -236,5 +236,13 @@ public class EmployeeController {
 		return new ResponseEntity<List<Object[]>>(add,HttpStatus.OK);
 	}
 	
+	@GetMapping("/getEmps")
+	public ResponseEntity<List<MasterEmployeeDetails>> getEmp(@RequestParam int leademployeeid){
+		
+		List<MasterEmployeeDetails> ls = masterEmployeeDetailsRepository.findBymasterEmployeeDetails_Id(leademployeeid);
+
+		return new ResponseEntity<List<MasterEmployeeDetails>>(ls,HttpStatus.OK);
+		
+	}
 
 }
