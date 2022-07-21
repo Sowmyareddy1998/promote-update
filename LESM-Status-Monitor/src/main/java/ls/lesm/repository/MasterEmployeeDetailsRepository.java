@@ -19,13 +19,13 @@ public interface MasterEmployeeDetailsRepository extends JpaRepository<MasterEmp
 					       + "designations.desg_names AS designation, employee_type.type_name AS employeeType, sub_departments.sub_department_names AS subDepartName"
 				+ " FROM( (("
 				          + "(master_emp_details"
-				+ " INNER JOIN departments"
+				+ " LEFT JOIN departments"
 				+ " ON master_emp_details.department_fk=departments.depart_id) "
-				+ "INNER JOIN designations "
-				+ "ON master_emp_details.desg_fk=designations.desg_id ) "
-				+ "INNER JOIN employee_type"
+				+ " LEFT JOIN designations "
+				+ " ON master_emp_details.desg_fk=designations.desg_id ) "
+				+ " LEFT JOIN employee_type"
 				+ " ON master_emp_details.emp_type_fk=employee_type.emp_type_id)"
-				+ " INNER JOIN sub_departments"
+				+ " LEFT JOIN sub_departments"
 				+ " ON master_emp_details.sub_depart_fk=sub_departments.sub_depart_id);")
 	public List<EmployeeDetailsResponse> getAllEmpDetails();
 

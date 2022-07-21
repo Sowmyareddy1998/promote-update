@@ -1,6 +1,6 @@
 package  ls.lesm.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -36,13 +36,13 @@ public class InternalExpenses {
 	private Double totalExpenses;// (salary+foodCost+cubicleCost+transportationCost)*benchTenure=totalExpenses
 	private Double profitOrLoss;// totalExpenses-totalEarningAtClients from (EmployeesAtClientsDetails table) if that expense from is internal will add that
 	
-	@JsonIgnore
-	private Date createdAt;//timpStamp
 	
-	@JsonIgnore
+	private LocalDate createdAt;//timpStamp
+	
+	
 	@Column(length=30)
 	private String createdBy;//principal
-	
+	@JsonIgnore
 	@OneToOne(fetch=FetchType.LAZY,cascade=CascadeType.ALL)
 	@JoinColumn(name="emp_id_fk")
 	private MasterEmployeeDetails masterEmployeeDetails;

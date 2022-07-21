@@ -19,4 +19,8 @@ public interface EmployeeDetailsService {
 	EmployeesAtClientsDetails insertClientsDetails(EmployeesAtClientsDetails clientDetails, Principal principal);
 
 	Page<EmployeesAtClientsDetails> getAllEmpClinetDetails(PageRequest pageReuquest);
+	
+	
+
+	
 }

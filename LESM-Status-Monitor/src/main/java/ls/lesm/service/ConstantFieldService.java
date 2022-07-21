@@ -31,5 +31,10 @@ public interface ConstantFieldService {
 	
 	List<Departments> getAllDepartments();
 	
+	List<AddressType> getAllAddType();
+	
+   
+    
+	
 
 }

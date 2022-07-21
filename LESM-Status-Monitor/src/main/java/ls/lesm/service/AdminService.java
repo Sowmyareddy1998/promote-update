@@ -9,7 +9,7 @@ public interface AdminService {
 	
 	public void deleteRoles(String roleName);
 	
-	public Role createNewRole(RoleRequest role);
+	public Role createNewRole(Role role);
 	
 	public List<Role> getAllRole();
 

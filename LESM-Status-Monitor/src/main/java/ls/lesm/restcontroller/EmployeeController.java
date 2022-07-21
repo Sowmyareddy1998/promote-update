@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.twilio.rest.api.v2010.account.AddressReader;
+
 import ls.lesm.exception.RecordNotFoundException;
 import ls.lesm.exception.RelationNotFoundExceptions;
 import ls.lesm.model.Address;
@@ -29,6 +31,7 @@ import ls.lesm.model.EmployeesAtClientsDetails;
 import ls.lesm.model.MasterEmployeeDetails;
 import ls.lesm.payload.response.EmployeeDetailsResponse;
 import ls.lesm.payload.response.Response;
+import ls.lesm.repository.AddressRepositoy;
 import ls.lesm.repository.ClientsRepository;
 import ls.lesm.repository.DepartmentsRepository;
 import ls.lesm.repository.DesignationsRepository;
@@ -59,9 +62,12 @@ public class EmployeeController {
 	
 	@Autowired
 	private EmployeesAtClientsDetailsRepository employeesAtClientsDetailsRepository;
-	
+
 	@Autowired
 	private ClientsRepository clientsRepository;
+	
+	@Autowired
+	private AddressRepositoy addressRepositoy;
 	
 	@PostMapping("/insert-address")
 	public ResponseEntity<?> adressFieldsInsertion(@RequestParam int addTypeId, @RequestBody Address address, Principal principal ){
@@ -137,8 +143,6 @@ public class EmployeeController {
 		return new ResponseEntity<>(HttpStatus.CREATED);
 }
 	
-	
-
 	@GetMapping("/get-all")
 	public ResponseEntity<List<EmployeesAtClientsDetails>> allEmpDetailsAtClient(){
 		
@@ -146,7 +150,6 @@ public class EmployeeController {
 		
 		return new ResponseEntity<List<EmployeesAtClientsDetails>>(all, HttpStatus.OK);
 	}
-	
 
 	@GetMapping("/get-details-byId/{id}")
 	public ResponseEntity<EmployeesAtClientsDetails> getDetailsOfEmpAtClientById(@RequestParam int id){
@@ -154,7 +157,6 @@ public class EmployeeController {
 		EmployeesAtClientsDetails clientDetails=employeesAtClientsDetailsRepository.findById(id).orElseThrow(()->
 		new RecordNotFoundException("Client Details with this id '"+id+"' not exist in database","51"));
 		
-	
 		Optional<MasterEmployeeDetails> employee=this.masterEmployeeDetailsRepository.findById(clientDetails.getMasterEmployeeDetails().getEmpId());
 		if(clientDetails.getPOEdate()==null) {
 		clientDetails.setTenure(ChronoUnit.MONTHS.between(clientDetails.getPOSdate(), LocalDate.now()));
@@ -226,6 +228,12 @@ public class EmployeeController {
 	public ResponseEntity<List<EmployeeDetailsResponse>> getAllEmp(){
 		List<EmployeeDetailsResponse>all=this.masterEmployeeDetailsRepository.getAllEmpDetails();
 		return new ResponseEntity<List<EmployeeDetailsResponse>>(all,HttpStatus.OK);
+	}
+	
+	@GetMapping("/address-by-id")
+	public ResponseEntity<List<Object[]>> findEmpAddById(@RequestParam int id){
+		List<Object[]> add= (List<Object[]>) this.addressRepositoy.findByEmpIdFk(id);
+		return new ResponseEntity<List<Object[]>>(add,HttpStatus.OK);
 	}
 	
 

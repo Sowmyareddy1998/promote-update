@@ -1,4 +1,5 @@
 package  ls.lesm.model;
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -12,8 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
-import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -38,9 +37,9 @@ public class OnsiteBillExpenses {
 	private Double food;
 	
 	
-	private Date travelSDate;
+	private LocalDate travelSDate;
 
-	private Date travelEDate;
+	private LocalDate travelEDate;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(length=30)
