@@ -34,4 +34,16 @@ public interface MasterEmployeeDetailsRepository extends JpaRepository<MasterEmp
 
 	@Query("FROM MasterEmployeeDetails g where g.supervisor.id = :supervisor")
 	List<MasterEmployeeDetails>  findBymasterEmployeeDetails_Id(@Param("supervisor")Integer  id);
+
+
+
+	
+
+
+
+	//public MasterEmployeeDetails findByLancesoftId(String id);
+
+
+
+	public MasterEmployeeDetails findByLancesoft(String id);
 }

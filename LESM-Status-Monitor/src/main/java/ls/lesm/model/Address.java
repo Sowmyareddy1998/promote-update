@@ -1,8 +1,7 @@
 
 package ls.lesm.model;
 
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -48,7 +47,7 @@ public class Address {
 	@Column(length=20)
 	private String country;
 	
-	private Date createdAt;// timeStamp;
+	private LocalDate createdAt;// timeStamp;
 	
 	@Column(length=20)
 	private String createdBy;// principal

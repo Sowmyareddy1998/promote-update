@@ -41,8 +41,8 @@ public class MasterEmployeeDetails extends AuditModel{
 	@GeneratedValue(generator = "emp_id_gen",strategy = GenerationType.AUTO)
 	private Integer empId;// AutoInc Pk
 	
-	@Column(length=30)
-	private String employeeId;// lancesoft Id	
+	@Column(length=30,name="employee_id")
+	private String lancesoft;// lancesoft Id	
 	
 	@Column(length=30)
 	private String firstName;
@@ -102,7 +102,7 @@ public class MasterEmployeeDetails extends AuditModel{
 	
 	
 	@JsonIgnore
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="supervisor_fk")
 	private MasterEmployeeDetails supervisor;
 	

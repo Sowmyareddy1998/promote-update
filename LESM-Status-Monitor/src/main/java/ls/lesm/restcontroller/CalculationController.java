@@ -1,11 +1,15 @@
 package ls.lesm.restcontroller;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ls.lesm.model.MasterEmployeeDetails;
+import ls.lesm.repository.MasterEmployeeDetailsRepository;
 import ls.lesm.service.impl.BusinessCalculation;
 import ls.lesm.service.impl.CountryHeadCalculation;
 import ls.lesm.service.impl.GeneralManagerCalculation;
@@ -35,11 +39,18 @@ public class CalculationController {
 	@Autowired
     ManagingDirectorCalculation managingDirectorCalculation;
 	
+	@Autowired
+	MasterEmployeeDetailsRepository masterEmployeeDetailsRepository;
+	
 
 	@PostMapping("/consultant/{id}")
-	public Double s(@PathVariable("id") Integer ids)
+	public Double s( Principal principal)
+	
 	{
-		Double profit_or_loss=businessCalculation.Employee_cal(ids);
+		String emp1=principal.getName();
+		MasterEmployeeDetails emp2=this.masterEmployeeDetailsRepository.findByLancesoft(emp1);
+		int id=emp2.getEmpId();
+		Double profit_or_loss=businessCalculation.Employee_cal(id);
 		
 		return profit_or_loss;
 		
@@ -59,9 +70,12 @@ public class CalculationController {
 	
 
 	@PostMapping("/managerCalculation/{id}")
-	public Double managerCalculation(@PathVariable("id") Integer ids)
+	public Double managerCalculation(Principal principal)
 	{
-		Double profit_or_loss=managerCalculation.manager_cal(ids);
+		String loggedIn=principal.getName();
+		MasterEmployeeDetails employee=this.masterEmployeeDetailsRepository.findByLancesoft(loggedIn);
+		int id=employee.getEmpId();
+		Double profit_or_loss=managerCalculation.manager_cal(id);
 		
 		return profit_or_loss;
 		

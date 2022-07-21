@@ -50,7 +50,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 		
 	@Override
 	public Address insertEmpAddress(Address address, Principal principal, Integer addTypeId) {
-		address.setCreatedAt(new Date());
+		address.setCreatedAt(LocalDate.now());
 		address.setCreatedBy(principal.getName());
 		Optional<Object> optional=addressTypeRepository.findById(addTypeId).map(type->{
 		address.setAdressType(type);
@@ -63,6 +63,11 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 	public MasterEmployeeDetails insetEmpDetails(MasterEmployeeDetails empDetails,  Principal principal) {
 		empDetails.setCreatedBy(principal.getName());
 		empDetails.setStatus(EmployeeStatus.BENCH);
+		Address address=new Address();
+		address.setCreatedAt(LocalDate.now());
+		address.setCreatedBy(principal.getName());
+		addressRepositoy.save(address);
+		
 		return this.masterEmployeeDetailsRepository.save(empDetails);
 	}
 

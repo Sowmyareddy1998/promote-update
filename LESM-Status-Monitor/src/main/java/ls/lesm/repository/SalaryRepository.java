@@ -13,4 +13,8 @@ public interface SalaryRepository extends JpaRepository<Salary, Integer> {
 
 	@Query(" FROM Salary g where g.masterEmployeeDetails.id = :masterEmployeeDetailsId")
 	Optional<?> findByEmployeeById(@Param("masterEmployeeDetailsId")Integer id);
+	
+
+	@Query("FROM Salary g where g.masterEmployeeDetails.id = :masterEmployeeDetailsId")
+	Optional<Salary>  findBymasterEmployeeDetails_Id(@Param("masterEmployeeDetailsId")Integer id);
 }

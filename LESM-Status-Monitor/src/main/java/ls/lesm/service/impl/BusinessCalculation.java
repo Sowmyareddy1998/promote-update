@@ -1,7 +1,6 @@
 package ls.lesm.service.impl;
 import java.time.LocalDate;
 import java.time.Period;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,7 +77,7 @@ public class BusinessCalculation {
 		
 		
 		
-	    Optional<Salary> tr = sr.findById(employeeId);
+	    Optional<Salary> tr = sr.findBymasterEmployeeDetails_Id(employeeId);
 
 		Salary salary = null;
 
@@ -113,7 +112,7 @@ public class BusinessCalculation {
 	
 
 
-		Optional<InternalExpenses> inten = internalExpenseRepo.findById(employeeId);
+		Optional<InternalExpenses> inten = internalExpenseRepo.findBymasterEmployeeDetails_Id(employeeId);
 
 		InternalExpenses expenses = null;
 

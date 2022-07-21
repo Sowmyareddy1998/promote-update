@@ -28,6 +28,7 @@ import ls.lesm.model.Address;
 import ls.lesm.model.EmployeeStatus;
 import ls.lesm.model.EmployeesAtClientsDetails;
 import ls.lesm.model.MasterEmployeeDetails;
+import ls.lesm.model.User;
 import ls.lesm.payload.response.EmployeeDetailsResponse;
 import ls.lesm.payload.response.Response;
 import ls.lesm.repository.AddressRepositoy;
@@ -38,6 +39,7 @@ import ls.lesm.repository.EmployeeTypeRepository;
 import ls.lesm.repository.EmployeesAtClientsDetailsRepository;
 import ls.lesm.repository.MasterEmployeeDetailsRepository;
 import ls.lesm.repository.SubDepartmentsRepository;
+import ls.lesm.repository.UserRepository;
 import ls.lesm.service.EmployeeDetailsService;
 
 @RestController
@@ -69,6 +71,9 @@ public class EmployeeController {
 	@Autowired
 	private AddressRepositoy addressRepositoy;
 	
+	@Autowired
+	private UserRepository userRepository;
+	
 	@PostMapping("/insert-address")
 	public ResponseEntity<?> adressFieldsInsertion(@RequestParam int addTypeId, @RequestBody Address address, Principal principal ){
 		this.employeeDetailsService.insertEmpAddress(address, principal, addTypeId);
@@ -83,7 +88,9 @@ public class EmployeeController {
 			                                     @RequestParam(required=false) Integer subDepartId,
 			                                     @RequestParam(required=false) Integer desgId,
 			                                     @RequestParam(required=false, defaultValue ="0") Integer typeId,
+			                                     @RequestParam Integer addressType,
 			                                     @RequestBody MasterEmployeeDetails empDetails,
+			                                    Address address,
 			                                                  Principal principal ){
 		this.masterEmployeeDetailsRepository.findById(subVId).map(id->{
 			empDetails.setSupervisor(id);
@@ -107,6 +114,14 @@ public class EmployeeController {
 			empDetails.setEmployeeType(id);
 			return id;
 		});		
+		
+		this.addressRepositoy.findById(addressType).map(id->{
+			//address.setMasterEmployeeDetailsempDetail(id);
+			return id;
+			
+			
+			
+		});
 		this.employeeDetailsService.insetEmpDetails(empDetails, principal);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 		
@@ -237,9 +252,13 @@ public class EmployeeController {
 	}
 	
 	@GetMapping("/getEmps")
-	public ResponseEntity<List<MasterEmployeeDetails>> getEmp(@RequestParam int leademployeeid){
+	public ResponseEntity<List<MasterEmployeeDetails>> getEmp( Principal principal){
 		
-		List<MasterEmployeeDetails> ls = masterEmployeeDetailsRepository.findBymasterEmployeeDetails_Id(leademployeeid);
+		User loggedU=this.userRepository.findByUsername(principal.getName());
+		String id=loggedU.getUsername();
+		MasterEmployeeDetails employee=this.masterEmployeeDetailsRepository.findByLancesoft(id);
+		int dbPk=employee.getEmpId();
+		List<MasterEmployeeDetails> ls = masterEmployeeDetailsRepository.findBymasterEmployeeDetails_Id(dbPk);
 
 		return new ResponseEntity<List<MasterEmployeeDetails>>(ls,HttpStatus.OK);
 		
