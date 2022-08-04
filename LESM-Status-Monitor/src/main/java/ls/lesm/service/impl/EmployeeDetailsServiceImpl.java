@@ -67,6 +67,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 		
 		
 		empDetails.getEmployeesAtClientsDetails().setCreatedAt(LocalDate.now());
+
 		empDetails.getEmployeesAtClientsDetails().setCreatedBy(principal.getName());
 
 				this.masterEmployeeDetailsRepository.save(empDetails.getMasterEmployeeDetails());
@@ -79,6 +80,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 	public EmployeesAtClientsDetails insertClientsDetails(EmployeesAtClientsDetails clientDetails,
 			Principal principal) {
 		clientDetails.setCreatedBy(principal.getName());
+		//clientDetails.setCreatedAt(LocalDate.now());
 		clientDetails.setCreatedAt(LocalDate.now());
 	 
 		//if(clientDetails.getPOSdate().before(clientDetails.getPOEdate()))
@@ -97,6 +99,13 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 
 	}
 
+	
+	
+
+	
+	
+	
+	
 
 	
 	

@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
 
 			for(UserRole ur: userRole) {
 				roleRepository.save(ur.getRole());//role save
+				System.out.println(ur);
 			}
 
 			user.getUserRole().addAll(userRole);//associating roles to user

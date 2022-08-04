@@ -37,13 +37,32 @@ public interface MasterEmployeeDetailsRepository extends JpaRepository<MasterEmp
 
 
 
+	public MasterEmployeeDetails findByLancesoft(String id);
+
+
+
+public List<MasterEmployeeDetails> findAll(int superviserId);
+
+
+
+
+
+
+
+
+
+
+	//public List<MasterEmployeeDetails> findAll(int superviserId);
+
+
+
 	
 
 
 
-	//public MasterEmployeeDetails findByLancesoftId(String id);
 
 
 
-	public MasterEmployeeDetails findByLancesoft(String id);
+
+	
 }

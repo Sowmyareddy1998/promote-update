@@ -5,7 +5,9 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import ls.lesm.exception.RoleAreadyExistException;
 import ls.lesm.model.Role;
@@ -27,6 +29,7 @@ public class AdminServiceImpl implements AdminService {
 	
 	@Transactional
 	@Override
+	//@ResponseStatus(value=HttpStatus.BAD_REQUEST,reason="already exist")
 	public Role createNewRole(Role role) {
 		Role local1=this.roleRepository.findByRoleName(role.getRoleName());
 		Role local2=this.roleRepository.findByRoleId(role.getRoleId());
@@ -51,3 +54,4 @@ public class AdminServiceImpl implements AdminService {
 	
 
 }
+

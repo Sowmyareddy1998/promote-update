@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ls.lesm.exception.DuplicateEntryException;
+import ls.lesm.exception.NoDataException;
 import ls.lesm.exception.RelationNotFoundExceptions;
 import ls.lesm.model.AddressType;
 import ls.lesm.model.Clients;
@@ -57,6 +58,7 @@ public class ConstantFieldServiceImpl implements ConstantFieldService {
 		desig.setCreatedAt(new Date());
 		
 		Designations local=this.desigRepository.findByDesgNames(desig.getDesgNames());
+		System.out.println(local);
 		if(local!=null)
 			throw new DuplicateEntryException("101","This Designation Already exist in database");
 		else
@@ -73,7 +75,11 @@ public class ConstantFieldServiceImpl implements ConstantFieldService {
 		if(local!=null)
 			throw new DuplicateEntryException("102","This Department Already exist in database");
 		else
+			if(depart.getDepart().isEmpty()||depart.getDepart().length()==0)
+			throw new DuplicateEntryException("103","This Department name is empty plz enter name");
+			else
 			this.departmentsRepository.save(depart);
+		
 		return depart;
 	}
 
@@ -86,6 +92,10 @@ public class ConstantFieldServiceImpl implements ConstantFieldService {
 		SubDepartments local=this.subDepartmentsRepository.findBySubDepartmentNames(subDepart.getSubDepartmentNames());
 		if(local!=null)
 			throw new DuplicateEntryException("103","This Sub-Department Already exist in database");
+		else
+			if(subDepart.getSubDepartmentNames().isEmpty()||subDepart.getSubDepartmentNames().length()==0)
+				throw new DuplicateEntryException("103","This client  name is empty plz enter name");
+				else
 		
 	    this.departmentsRepository.findById(departId).map(depart->{
 	    subDepart.setDepartments(depart);
@@ -103,6 +113,10 @@ public class ConstantFieldServiceImpl implements ConstantFieldService {
 		if(local!=null)
 			throw new DuplicateEntryException("104","This Client Already exist in database");
 		else
+			if(clients.getClientsNames().isEmpty()||clients.getClientsNames().length()==0)
+				throw new DuplicateEntryException("103","This client  name is empty plz enter name");
+				else
+					
 			this.clientsRepository.save(clients);
 		return clients;
 	}
@@ -113,6 +127,9 @@ public class ConstantFieldServiceImpl implements ConstantFieldService {
 		if(local!=null)
 			throw new DuplicateEntryException("This Employee Type with this name '"+local.getTypeName()+"' Already exist in database","105");
 		else
+			if(empType.getTypeName().isEmpty()||empType.getTypeName().length()==0)
+					throw new DuplicateEntryException("103","This emp type  is empty plz enter");
+					else
 			this.employeeTypeRepository.save(empType);
 		return empType;
 	}
@@ -133,12 +150,17 @@ public class ConstantFieldServiceImpl implements ConstantFieldService {
 	public List<SubDepartments> getAllSubDepartments() {
 
 		List<SubDepartments> all= this.subDepartmentsRepository.findAll();
+		if(all.isEmpty())
+			throw new NoDataException("105","subdepart records not there in database");
 		return all;
 	}
 
 	@Override
 	public List<Departments> getAllDepartments() {
-		return this.departmentsRepository.findAll();
+		List<Departments> departObj=this.departmentsRepository.findAll();
+		if(departObj.isEmpty())
+			throw new  NoDataException("106","depart records not there in database");
+		return departObj;
 		
 	}
 
@@ -157,6 +179,14 @@ public class ConstantFieldServiceImpl implements ConstantFieldService {
 		
 		return this.addressTypeRepository.findAll();
 	}
+	
+//	public List<Clients> getAllClients() {
+//		List<Clients> clientObj=this.clientsRepository.findAll();
+//		if(clientObj.isEmpty())
+//			throw new  NoDataException("106","depart records not there in database");
+//		return clientObj;
+//		
+//	}
 
 	
 

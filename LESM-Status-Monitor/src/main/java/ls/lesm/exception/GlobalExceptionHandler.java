@@ -7,9 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-public class GlobalExceptionHandler {
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	@ExceptionHandler(RoleAreadyExistException.class)
 	public ResponseEntity<?> roleExistHandler(RoleAreadyExistException roleExist, WebRequest webRequest){
@@ -53,4 +54,21 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(apiErorrs, HttpStatus.NOT_FOUND); 
 		
 	}
+	
+	@ExceptionHandler(NoDataException.class)
+	public ResponseEntity<?> recordNotPresentHandler(NoDataException raee, WebRequest webRequest){
+		ApiErorrs apiErorrs =new ApiErorrs(new Date(),raee.getErrorMessage(), raee.getErrorCode(),raee.getMessage());
+	return new ResponseEntity<>(apiErorrs, HttpStatus.NOT_FOUND); 
+		
+}	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

@@ -1,4 +1,4 @@
-package ls.lesm.restcontroller;
+ package ls.lesm.restcontroller;
 
 import java.util.HashSet;
 import java.util.List;
@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import ls.lesm.model.Role;
@@ -53,6 +55,8 @@ public class AdminController {
 	
 	//create User
 	@PostMapping("/sign-up")
+	
+    @PreAuthorize("hasAuthority('HR')")
 	public User createUser(@RequestBody User user) throws Exception {
 		LOG.info("Enterd into createUser Method");
 
@@ -61,8 +65,8 @@ public class AdminController {
 		Set<UserRole> userRoleSet=new HashSet<>();
 
 		Role role=new Role();         //default role "User"
-		role.setRoleId(11);
-		role.setRoleName("USER");
+		//role.setRoleId(11);
+		role.setRoleName(user.getRoleName());
 		
 
 		user.setRoleName(role.getRoleName());
@@ -84,6 +88,7 @@ public class AdminController {
 		}
 
 	@DeleteMapping("/delete-roles/{roleName}")
+	  @PreAuthorize("hasAuthority('HR')")
 	public ResponseEntity<?> deleteRole(@PathVariable String roleName, Role role){
 		this.adminServiceImpl.deleteRoles(roleName);
 		return new ResponseEntity<>(HttpStatus.OK);

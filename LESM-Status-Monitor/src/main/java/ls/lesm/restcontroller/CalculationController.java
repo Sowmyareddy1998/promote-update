@@ -3,6 +3,7 @@ package ls.lesm.restcontroller;
 import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,6 +45,7 @@ public class CalculationController {
 	
 
 	@PostMapping("/consultant/{id}")
+
 	public Double s( Principal principal)
 	
 	{
@@ -51,13 +53,13 @@ public class CalculationController {
 		MasterEmployeeDetails emp2=this.masterEmployeeDetailsRepository.findByLancesoft(emp1);
 		int id=emp2.getEmpId();
 		Double profit_or_loss=businessCalculation.Employee_cal(id);
-		
 		return profit_or_loss;
 		
 	}
 	
 	
 	@PostMapping("/lead/{id}")
+
 	public Double lead(@PathVariable("id") Integer ids)
 	{
 		Double profit_or_loss=leadCalculation.lead_cal(ids);
@@ -83,6 +85,7 @@ public class CalculationController {
 	
 	
 	@PostMapping("/generalManagerCalculation/{id}")
+	 
 	public Double generalManagerCalculationManagerCalculation(@PathVariable("id") Integer ids)
 	{
 		Double profit_or_loss=generalManagerCalculation.generalManagercal(ids);
@@ -94,6 +97,7 @@ public class CalculationController {
 	
 
 	@PostMapping("/countryHeadCalculation/{id}")
+	 //@PreAuthorize("hasAuthority('MD')")
 	public Double countryHeadCalculation(@PathVariable("id") Integer ids)
 	{
 		Double profit_or_loss=countryHeadCalculation.countryHeadCal(ids);

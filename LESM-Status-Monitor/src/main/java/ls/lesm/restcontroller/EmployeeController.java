@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -129,6 +130,7 @@ public class EmployeeController {
 	}
 	
 	@PostMapping("/inser-empat-client")
+	 @PreAuthorize("hasAuthority('MANAGER')")
 	public ResponseEntity<?> insertEmpAtClient(@RequestParam int empId,
                                                @RequestParam int clientId,
                                                @RequestBody  EmployeesAtClientsDetails clientDetails,
@@ -168,6 +170,7 @@ public class EmployeeController {
 	}
 
 	@GetMapping("/get-details-byId/{id}")
+	 @PreAuthorize("hasAuthority('MANAGER')")
 	public ResponseEntity<EmployeesAtClientsDetails> getDetailsOfEmpAtClientById(@RequestParam int id){
 		
 		EmployeesAtClientsDetails clientDetails=employeesAtClientsDetailsRepository.findById(id).orElseThrow(()->
@@ -191,6 +194,7 @@ public class EmployeeController {
 	}
 	
 	@GetMapping("/getAll-detail-empAtClient")
+	 @PreAuthorize("hasAuthority('MANAGER')")
 	public ResponseEntity<Map<String, Object>> getAllDetailsOfEmpAtClient(
 			@RequestParam(value="pageNumber", defaultValue = "0", required = false) Integer pageNumber,
 			@RequestParam(value="pageSize", defaultValue="10", required=false)Integer pageSize){
@@ -241,6 +245,7 @@ public class EmployeeController {
 	
 	}
 	@GetMapping("/get-all-empDetails")
+	
 	public ResponseEntity<List<EmployeeDetailsResponse>> getAllEmp(){
 		List<EmployeeDetailsResponse>all=this.masterEmployeeDetailsRepository.getAllEmpDetails();
 		return new ResponseEntity<List<EmployeeDetailsResponse>>(all,HttpStatus.OK);
@@ -257,6 +262,7 @@ public class EmployeeController {
 		
 		User loggedU=this.userRepository.findByUsername(principal.getName());
 		String id=loggedU.getUsername();
+	
 		MasterEmployeeDetails employee=this.masterEmployeeDetailsRepository.findByLancesoft(id);
 		int dbPk=employee.getEmpId();
 		List<MasterEmployeeDetails> ls = masterEmployeeDetailsRepository.findBymasterEmployeeDetails_Id(dbPk);
@@ -264,5 +270,9 @@ public class EmployeeController {
 		return new ResponseEntity<List<MasterEmployeeDetails>>(ls,HttpStatus.OK);
 		
 	}
+	
+	
+	
+	
 
 }

@@ -2,6 +2,7 @@ package  ls.lesm.model;
 
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,20 +17,25 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.data.annotation.LastModifiedDate;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @Entity
 @Table(name="Master_EMP_Details")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+//@ToString
 public class MasterEmployeeDetails extends AuditModel{
 	
 	/**
@@ -74,6 +80,7 @@ public class MasterEmployeeDetails extends AuditModel{
 	private String createdBy;
 	
 	private LocalDate exitAt;
+
 	
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	@JsonIgnore
@@ -90,7 +97,7 @@ public class MasterEmployeeDetails extends AuditModel{
 	
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
 	@JsonIgnore
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(cascade = CascadeType.PERSIST,   fetch=FetchType.LAZY)
 	@JoinColumn(name="Desg_fk")
 	private Designations designations;
 	
@@ -117,6 +124,10 @@ public class MasterEmployeeDetails extends AuditModel{
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="emp_type_fk")
 	private EmployeeType employeeType;
+
+	
+	
+	
 	
 	
 

@@ -26,4 +26,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
 	//@Query("SELECT user FROM User user LEFT JOIN user.roles role WHERE role.id = ?1")
     //List<User> findUserByRole(int role);
+	
+	 
 }
