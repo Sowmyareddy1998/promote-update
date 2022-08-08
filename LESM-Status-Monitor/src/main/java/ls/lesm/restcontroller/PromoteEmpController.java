@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ls.lesm.model.Designations;
 import ls.lesm.model.MasterEmployeeDetails;
 import ls.lesm.payload.request.PromoteEmployeeRequest;
-import ls.lesm.service.impl.PromoteEmployee;
+import ls.lesm.service.impl.PromoteEmployeeService;
 
 
 
@@ -24,12 +24,12 @@ public class PromoteEmpController {
 	
 	
 	@Autowired
-	private PromoteEmployee promoteEmployee; 
+	private PromoteEmployeeService promoteEmployee; 
 	
 	
 	
 	@PutMapping("/update/{emp_id}/{sub_id}")
-	public  ResponseEntity<String>  promoteEmp(@RequestBody Designations designations,@PathVariable ("emp_id") int emp,@PathVariable("sub_id") int superviserId
+	public  ResponseEntity<String>  promoteEmp(@RequestBody Designations designations,@PathVariable ("emp_id") int emp,@PathVariable(" sub_id") int superviserId
 			)
 	{
 //		MasterEmployeeDetails 	masterEmployeeDetails=new 	MasterEmployeeDetails();
@@ -38,14 +38,16 @@ public class PromoteEmpController {
 		
 		return new ResponseEntity<String>("updated ",HttpStatus.CREATED );
 	}
-
-@PutMapping("/get/{sub_id}")
-public  ResponseEntity<String>  promoteEmpUpdate(@PathVariable("sub_id") int superviserId)
-{
-
-	promoteEmployee.promoteEmployeeDetailsUpdate(superviserId);
 	
-	return new ResponseEntity<String>("updated ",HttpStatus.CREATED );
-}
-}
 	
+	@PutMapping("/getin/{sup_id}/{updatedSupervisio_id}")
+	
+	public String getInfo(@PathVariable(value="updatedSupervisio_id") int updatedSupervisio_id,@PathVariable("sup_id") int  sup_id)
+	{
+		
+		promoteEmployee.promoteEmployeeDetailsUpdate( updatedSupervisio_id,sup_id);
+		
+		return "Am here you Don't Here";
+	}
+}
+

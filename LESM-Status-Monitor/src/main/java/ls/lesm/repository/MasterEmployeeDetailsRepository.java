@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import ls.lesm.model.Designations;
 import ls.lesm.model.MasterEmployeeDetails;
 import ls.lesm.payload.response.EmployeeDetailsResponse;
 @Repository
@@ -41,8 +42,22 @@ public interface MasterEmployeeDetailsRepository extends JpaRepository<MasterEmp
 
 
 
-public List<MasterEmployeeDetails> findAll(int superviserId);
+//public List<MasterEmployeeDetails> findByDesignation(String desgNames);
+	
+//	@Query("FROM MasterEmployeeDetails g where g.supervisor.id = :supervisor")
+//	List<MasterEmployeeDetails>  getBymasterEmployeeDetails_Id(@Param("supervisor")Integer  id);
 
+
+
+
+
+
+
+
+
+
+
+	
 
 
 

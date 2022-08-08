@@ -31,11 +31,12 @@ import lombok.ToString;
 
 @Entity
 @Table(name="Master_EMP_Details")
+//@Data
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-//@ToString
+@ToString
 public class MasterEmployeeDetails extends AuditModel{
 	
 	/**
@@ -73,12 +74,11 @@ public class MasterEmployeeDetails extends AuditModel{
 	private EmployeeStatus status;// active/bench/releas
 	
 	private Integer Age;// dob+sysDate
+	
 	private Boolean isInternal;// employee is internal or external
 	
 	private Long phoneNo;
-	
 	private String createdBy;
-	
 	private LocalDate exitAt;
 
 	

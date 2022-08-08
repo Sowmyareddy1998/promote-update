@@ -4,7 +4,11 @@ import java.security.Principal;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
+
+import javax.print.attribute.standard.Destination;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -19,7 +23,7 @@ import ls.lesm.repository.DesignationsRepository;
 import ls.lesm.repository.MasterEmployeeDetailsRepository;
 
 @Service
-public class PromoteEmployee {
+public class PromoteEmployeeService {
 	
 	
 	
@@ -31,14 +35,12 @@ public class PromoteEmployee {
 	
 	public MasterEmployeeDetails promoteEmployeeDetails( Designations designations, int emp, int  superviserId) {
 		
-	//	MasterEmployeeDetails 	masterEmployeeDetails=new 	MasterEmployeeDetails();
-//		empDetails.getMasterEmployeeDetails().setCreatedBy(principal.getName());
-//		empDetails.getMasterEmployeeDetails().setStatus(EmployeeStatus.BENCH);
 	
 			
 	System.out.println("\n\n\n\n"+designations+"\n\n\n\n\n");
 	
 		MasterEmployeeDetails Exist=masterEmployeeDetailsRepository.findById(emp).get();
+		
 		
 		System.out.println("......................."+Exist);
 		Designations design=designationsRepository.findByDesgNames(designations.getDesgNames());
@@ -56,21 +58,44 @@ public class PromoteEmployee {
 
 
 
-public List<MasterEmployeeDetails> promoteEmployeeDetailsUpdate(  int  superviserId) {
-
-	MasterEmployeeDetails masterEmployeeDetails=new MasterEmployeeDetails();
-	List<MasterEmployeeDetails> masterEmployeeDetailsobj= masterEmployeeDetailsRepository.findAll(superviserId);
 
 
-	for(MasterEmployeeDetails master:masterEmployeeDetailsobj) {
-		System.out.println(master);
+
+public List<MasterEmployeeDetails> promoteEmployeeDetailsUpdate(int updatedSupervisio_id, int superviserId) {
+	
+	
+List<MasterEmployeeDetails> list=masterEmployeeDetailsRepository.findBymasterEmployeeDetails_Id(superviserId);
+System.out.println(list);
+MasterEmployeeDetails list1=masterEmployeeDetailsRepository.findById(updatedSupervisio_id).get();
+System.out.println(list1);
+
+	
+	for(MasterEmployeeDetails mes:list)
+	{
+//		System.out.println(mes);
+//		list1.setSupervisor(mes);
 		
-		master.setSupervisor(masterEmployeeDetails.getSupervisor());
+		mes.setSupervisor(list1);
+		
+		
+		
 		}
 	
-  return masterEmployeeDetailsRepository.saveAll(masterEmployeeDetailsobj);
+	
+	return list;
+	
 }
+
 }
+
+
+
+
+
+
+
+
+
 
 		
 		

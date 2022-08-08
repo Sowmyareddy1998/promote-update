@@ -22,13 +22,19 @@ public class LesmStatusMonitorApplication  implements CommandLineRunner {
 	public static void main(String[] args) {
 		SpringApplication.run(LesmStatusMonitorApplication.class, args);
 		
-	}	
+		System.out.println("HI..... ");
+		
+	}
+
+
+
+	
 		
 	
 	@Override
 	public void run(String... args) throws Exception{
 		
-		
+//		
 		
 		
 		

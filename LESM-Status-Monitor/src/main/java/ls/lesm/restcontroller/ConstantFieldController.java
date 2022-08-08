@@ -60,14 +60,14 @@ public class ConstantFieldController {
 	private AddressRepositoy addressRepositoy;
 	
 	@PostMapping("/insert-desig")
-    @PreAuthorize("hasAuthority('HR')")
+    //@PreAuthorize("hasAuthority('HR')")
 	public ResponseEntity<?> desigFieldInsertions(@RequestBody Designations desig, Principal principal){
 		this.contantConstantFieldService.insertDesg(desig, principal);
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 	
 	@PostMapping("/insert-depart")
-	   @PreAuthorize("hasAuthority('HR')")
+	  // @PreAuthorize("hasAuthority('HR')")
 	public ResponseEntity<?> departFieldInsertions(@RequestBody Departments depart, Principal principal){
 		this.contantConstantFieldService.insertDepart(depart, principal);
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
@@ -81,7 +81,7 @@ public class ConstantFieldController {
 	}
 	
 	@PostMapping("/insert-clients")
-	   @PreAuthorize("hasAuthority('MANAGER')")
+	  // @PreAuthorize("hasAuthority('MANAGER')")
 	public ResponseEntity<?> clientsFieldInsertions(@RequestBody Clients clients, Principal principal){
 		this.contantConstantFieldService.insertClient(clients, principal);
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
@@ -106,14 +106,14 @@ public class ConstantFieldController {
 	}
 	
 	@GetMapping("/get-all-subDepart")
-	   @PreAuthorize("hasAuthority('MANAGER')")
+	   //@PreAuthorize("hasAuthority('MANAGER')")
 	public ResponseEntity<List<SubDepartments>> allSubDeparts(){
 		List<SubDepartments> all=this.contantConstantFieldService.getAllSubDepartments();
 		return new ResponseEntity<List<SubDepartments>>(all, HttpStatus.OK);
 	}
 	
 	@GetMapping("/get-all-Depart")
-	   @PreAuthorize("hasAuthority('MANAGER')")
+	  // @PreAuthorize("hasAuthority('MANAGER')")
 	public ResponseEntity<List<Departments>> allDeparts(){
 		List<Departments> all=this.contantConstantFieldService.getAllDepartments();
 		return new ResponseEntity<List<Departments>>(all, HttpStatus.OK);
@@ -126,7 +126,7 @@ public class ConstantFieldController {
 	}
 	
 	@GetMapping("/get-all-clients")
-	   @PreAuthorize("hasAuthority('MANAGER')")
+	   //@PreAuthorize("hasAuthority('MANAGER')")
 	public ResponseEntity<List<Clients>> getAllClients(){
 		List<Clients> allC=this.clientsRepository.findAll();
 		if(allC.isEmpty())

@@ -130,7 +130,7 @@ public class EmployeeController {
 	}
 	
 	@PostMapping("/inser-empat-client")
-	 @PreAuthorize("hasAuthority('MANAGER')")
+	// @PreAuthorize("hasAuthority('MANAGER')")
 	public ResponseEntity<?> insertEmpAtClient(@RequestParam int empId,
                                                @RequestParam int clientId,
                                                @RequestBody  EmployeesAtClientsDetails clientDetails,
@@ -170,7 +170,7 @@ public class EmployeeController {
 	}
 
 	@GetMapping("/get-details-byId/{id}")
-	 @PreAuthorize("hasAuthority('MANAGER')")
+	 //@PreAuthorize("hasAuthority('MANAGER')")
 	public ResponseEntity<EmployeesAtClientsDetails> getDetailsOfEmpAtClientById(@RequestParam int id){
 		
 		EmployeesAtClientsDetails clientDetails=employeesAtClientsDetailsRepository.findById(id).orElseThrow(()->
@@ -194,7 +194,7 @@ public class EmployeeController {
 	}
 	
 	@GetMapping("/getAll-detail-empAtClient")
-	 @PreAuthorize("hasAuthority('MANAGER')")
+	 //@PreAuthorize("hasAuthority('MANAGER')")
 	public ResponseEntity<Map<String, Object>> getAllDetailsOfEmpAtClient(
 			@RequestParam(value="pageNumber", defaultValue = "0", required = false) Integer pageNumber,
 			@RequestParam(value="pageSize", defaultValue="10", required=false)Integer pageSize){

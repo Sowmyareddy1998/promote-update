@@ -56,7 +56,7 @@ public class AdminController {
 	//create User
 	@PostMapping("/sign-up")
 	
-    @PreAuthorize("hasAuthority('HR')")
+    //@PreAuthorize("hasAuthority('HR')")
 	public User createUser(@RequestBody User user) throws Exception {
 		LOG.info("Enterd into createUser Method");
 
@@ -86,9 +86,8 @@ public class AdminController {
 		this.adminServiceImpl.createNewRole( role);
 		return new ResponseEntity<Role>(HttpStatus.ACCEPTED);
 		}
-
-	@DeleteMapping("/delete-roles/{roleName}")
-	  @PreAuthorize("hasAuthority('HR')")
+    @DeleteMapping("/delete-roles/{roleName}")
+	  //@PreAuthorize("hasAuthority('HR')")
 	public ResponseEntity<?> deleteRole(@PathVariable String roleName, Role role){
 		this.adminServiceImpl.deleteRoles(roleName);
 		return new ResponseEntity<>(HttpStatus.OK);
