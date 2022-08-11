@@ -1,8 +1,6 @@
-package  ls.lesm.model;
-
+package ls.lesm.model;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,33 +13,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
-import org.springframework.data.annotation.LastModifiedDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-
 @Entity
-@Table(name="Master_EMP_Details")
-//@Data
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
-public class MasterEmployeeDetails extends AuditModel{
+public class HistoryOfEmployee  extends AuditModel{
+
 	
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -101,13 +81,6 @@ public class MasterEmployeeDetails extends AuditModel{
 	@JoinColumn(name="Desg_fk")
 	private Designations designations;
 	
-	/*@OneToOne(cascade=CascadeType.ALL)
-	@JoinTable(name="employee_relation",
-	joinColumns=@JoinColumn (name="emp_id"),
-	inverseJoinColumns =@JoinColumn(name="supervisor_id"))
-	private MasterEmployeeDetails masterEmployeeDetails;*/
-	
-	
 	@JsonIgnore
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="supervisor_fk")
@@ -124,13 +97,6 @@ public class MasterEmployeeDetails extends AuditModel{
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="emp_type_fk")
 	private EmployeeType employeeType;
+	private String promoteEmployee;
 
-	
-
-	
-	
-	
-	
-	
-
-}
+	}

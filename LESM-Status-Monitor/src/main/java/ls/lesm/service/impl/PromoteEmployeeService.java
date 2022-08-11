@@ -1,3 +1,5 @@
+
+
 package ls.lesm.service.impl;
 
 import java.security.Principal;
@@ -36,6 +38,7 @@ public class PromoteEmployeeService {
 	public MasterEmployeeDetails promoteEmployeeDetails( Designations designations, int emp, int  superviserId) {
 		
 	
+		
 			
 	System.out.println("\n\n\n\n"+designations+"\n\n\n\n\n");
 	
@@ -53,66 +56,5 @@ public class PromoteEmployeeService {
 		return masterEmployeeDetailsRepository.save(Exist);
 	
 	}
-
-
-
-
-
-
-
-
-public List<MasterEmployeeDetails> promoteEmployeeDetailsUpdate(int updatedSupervisio_id, int superviserId) {
-	
-	
-List<MasterEmployeeDetails> list=masterEmployeeDetailsRepository.findBymasterEmployeeDetails_Id(superviserId);
-System.out.println(list);
-MasterEmployeeDetails list1=masterEmployeeDetailsRepository.findById(updatedSupervisio_id).get();
-System.out.println(list1);
-
-	
-	for(MasterEmployeeDetails mes:list)
-	{
-//		System.out.println(mes);
-//		list1.setSupervisor(mes);
-		
-		mes.setSupervisor(list1);
-		
-		
-		
-		}
-	
-	
-	return list;
-	
 }
 
-}
-
-
-
-
-
-
-
-
-
-
-		
-		
-		
-		
-		
-		
-		
-//		empDetails.getMasterEmployeeDetails().setCreatedBy(principal.getName());
-//		empDetails.getMasterEmployeeDetails().setStatus(EmployeeStatus.BENCH);
-		
-		
-//		empDetails.getEmployeesAtClientsDetails().setCreatedAt(LocalDate.now());
-//		empDetails.getEmployeesAtClientsDetails().setCreatedBy(principal.getName());
-
-//				MasterEmployeeDetailsRepository.save(empDetails.getMasterEmployeeDetails());
-//
-//				//this.employeesAtClientsDetailsRepository.save(empDetails.getEmployeesAtClientsDetails());
-//				return empDetails;
-	

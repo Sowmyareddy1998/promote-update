@@ -40,44 +40,6 @@ public interface MasterEmployeeDetailsRepository extends JpaRepository<MasterEmp
 
 	public MasterEmployeeDetails findByLancesoft(String id);
 
-
-
-//public List<MasterEmployeeDetails> findByDesignation(String desgNames);
-	
-//	@Query("FROM MasterEmployeeDetails g where g.supervisor.id = :supervisor")
-//	List<MasterEmployeeDetails>  getBymasterEmployeeDetails_Id(@Param("supervisor")Integer  id);
-
-
-
-
-
-
-
-
-
-
-
-	
-
-
-
-
-
-
-
-
-
-	//public List<MasterEmployeeDetails> findAll(int superviserId);
-
-
-
-	
-
-
-
-
-
-
-
-	
+    @Query("FROM MasterEmployeeDetails g where g.designations.id = :designations")
+	List<MasterEmployeeDetails>  findByDesignations_Id(@Param("designations")Integer  id);
 }
