@@ -1,54 +1,42 @@
-package  ls.lesm.model;
-
+package Is.lesm.dto;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
+import ls.lesm.model.Departments;
+import ls.lesm.model.Designations;
+import ls.lesm.model.EmployeeStatus;
+import ls.lesm.model.EmployeeType;
+import ls.lesm.model.MasterEmployeeDetails;
+import ls.lesm.model.SubDepartments;
 
-@Entity
-@Table(name="Master_EMP_Details")
-//@Data
-@Getter
-@Setter
-@AllArgsConstructor
+
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
-public class MasterEmployeeDetails extends AuditModel{
+public class HistoryOfEmployee {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(generator = "emp_id_gen",strategy = GenerationType.AUTO)
-	private Integer empId;// AutoInc Pk
-	
+//	@Id
+//	@GeneratedValue(generator = "emp_id_gen",strategy = GenerationType.AUTO)
+//	private Integer empId;// AutoInc Pk
+//	
 	@Column(length=30,name="employee_id")
 	private String lancesoft;// lancesoft Id	
 	
@@ -73,10 +61,6 @@ public class MasterEmployeeDetails extends AuditModel{
 	
 	@Enumerated(EnumType.STRING)
 	private EmployeeStatus status;// active/bench/releas
-	
-	@Enumerated(EnumType.STRING)
-	private UpdateEmpStatus updatestatus;// active/bench/releas
-	
 	
 	private Integer Age;// dob+sysDate
 	
@@ -106,13 +90,6 @@ public class MasterEmployeeDetails extends AuditModel{
 	@JoinColumn(name="Desg_fk")
 	private Designations designations;
 	
-	/*@OneToOne(cascade=CascadeType.ALL)
-	@JoinTable(name="employee_relation",
-	joinColumns=@JoinColumn (name="emp_id"),
-	inverseJoinColumns =@JoinColumn(name="supervisor_id"))
-	private MasterEmployeeDetails masterEmployeeDetails;*/
-	
-	
 	@JsonIgnore
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="supervisor_fk")
@@ -129,13 +106,9 @@ public class MasterEmployeeDetails extends AuditModel{
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="emp_type_fk")
 	private EmployeeType employeeType;
+	private String promoteEmployee;
 
-	
+	}
 
-	
-	
-	
-	
-	
 
-}
+

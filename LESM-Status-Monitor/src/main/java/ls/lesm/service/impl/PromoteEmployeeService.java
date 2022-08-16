@@ -12,17 +12,22 @@ import java.util.Optional;
 
 import javax.print.attribute.standard.Destination;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import ls.lesm.model.Designations;
 import ls.lesm.model.EmployeeStatus;
+import ls.lesm.model.HistoryOfEmp;
 import ls.lesm.model.MasterEmployeeDetails;
+import ls.lesm.model.UpdateEmpStatus;
+import ls.lesm.model.User;
 import ls.lesm.payload.request.EmployeeDetailsRequest;
 import ls.lesm.payload.request.PromoteEmployeeRequest;
 import ls.lesm.repository.DesignationsRepository;
 import ls.lesm.repository.MasterEmployeeDetailsRepository;
+import ls.lesm.repository.UserRepository;
 
 @Service
 public class PromoteEmployeeService {
@@ -33,13 +38,14 @@ public class PromoteEmployeeService {
 	 private MasterEmployeeDetailsRepository  masterEmployeeDetailsRepository;
 	@Autowired
 	private DesignationsRepository designationsRepository;
+	@Autowired
+	private UserRepository userRepository;
 	
-	
-	public MasterEmployeeDetails promoteEmployeeDetails( Designations designations, int emp, int  superviserId) {
+	public MasterEmployeeDetails promoteEmployeeDetails( Designations designations, int emp, int  superviserId,Principal principal) {
 		
-	
-		
-			
+		 User user=userRepository.findByUsername(principal.getName());
+		System.out.println(user);
+
 	System.out.println("\n\n\n\n"+designations+"\n\n\n\n\n");
 	
 		MasterEmployeeDetails Exist=masterEmployeeDetailsRepository.findById(emp).get();
@@ -56,5 +62,5 @@ public class PromoteEmployeeService {
 		return masterEmployeeDetailsRepository.save(Exist);
 	
 	}
-}
+	}
 
