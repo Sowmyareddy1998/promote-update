@@ -2,6 +2,7 @@
 package ls.lesm.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -42,4 +43,28 @@ public interface MasterEmployeeDetailsRepository extends JpaRepository<MasterEmp
 
     @Query("FROM MasterEmployeeDetails g where g.designations.id = :designations")
 	List<MasterEmployeeDetails>  findByDesignations_Id(@Param("designations")Integer  id);
+
+
+
+	
+    
+
+
+	
+
+
+	
+
+
+
+
+
+	
+
+
+   
+
+
+
+	
 }

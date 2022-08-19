@@ -74,8 +74,6 @@ public class MasterEmployeeDetails extends AuditModel{
 	@Enumerated(EnumType.STRING)
 	private EmployeeStatus status;// active/bench/releas
 	
-	@Enumerated(EnumType.STRING)
-	private UpdateEmpStatus updatestatus;// active/bench/releas
 	
 	
 	private Integer Age;// dob+sysDate

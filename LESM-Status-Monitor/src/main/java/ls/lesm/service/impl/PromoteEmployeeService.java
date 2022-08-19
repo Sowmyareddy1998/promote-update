@@ -3,7 +3,6 @@
 package ls.lesm.service.impl;
 
 import java.security.Principal;
-
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.Iterator;
@@ -12,7 +11,7 @@ import java.util.Optional;
 
 import javax.print.attribute.standard.Destination;
 
-import org.modelmapper.ModelMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -45,7 +44,7 @@ public class PromoteEmployeeService {
 		
 		 User user=userRepository.findByUsername(principal.getName());
 		System.out.println(user);
-
+	
 	System.out.println("\n\n\n\n"+designations+"\n\n\n\n\n");
 	
 		MasterEmployeeDetails Exist=masterEmployeeDetailsRepository.findById(emp).get();

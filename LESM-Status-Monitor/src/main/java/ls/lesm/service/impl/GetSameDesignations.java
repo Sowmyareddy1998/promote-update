@@ -1,24 +1,24 @@
 package ls.lesm.service.impl;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import com.twilio.rest.api.v2010.account.Call.UpdateStatus;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import ls.lesm.model.Departments;
+import ls.lesm.model.Designations;
 import ls.lesm.model.EmployeeStatus;
+import ls.lesm.model.EmployeeType;
 import ls.lesm.model.HistoryOfEmp;
 import ls.lesm.model.MasterEmployeeDetails;
+import ls.lesm.model.SubDepartments;
 import ls.lesm.model.UpdateEmpStatus;
 import ls.lesm.model.User;
-import ls.lesm.repository.HistoryOfEmpRepository;
+import ls.lesm.repository.HistoryRepository;
 import ls.lesm.repository.MasterEmployeeDetailsRepository;
 import ls.lesm.repository.UserRepository;
 
@@ -35,8 +35,7 @@ public class GetSameDesignations {
 	private UserRepository userRepository;
 	
 	@Autowired
-	private HistoryOfEmpRepository historyOfEmpRepository;
-	
+	private HistoryRepository historyRepository;
 	
 	public List<MasterEmployeeDetails> getSameDesignations(int DesignationId)
 	 {
@@ -56,22 +55,35 @@ public class GetSameDesignations {
 
 		 List<MasterEmployeeDetails> g=masterEmployeeDetailsRepository.findBymasterEmployeeDetails_Id(oldsuperviserId);
 	     MasterEmployeeDetails newemployee= masterEmployeeDetailsRepository.findById(newsuperviserId).get();
-		 System.out.println(newemployee);
+		 System.out.println("*********************"+newemployee);
 		 
-//		 MasterEmployeeDetails empdetails=new MasterEmployeeDetails();
-//		 HistoryOfEmployee historyOfEmployee=new HistoryOfEmployee();
-//
-//		 ModelMapper modelMapper = new ModelMapper();
-//		 System.err.println(empdetails);
-//	
-//		 HistoryOfEmployee m1= modelMapper.map( empdetails, HistoryOfEmployee.class);
-//	  
-		// System.out.println("---------------------------------------------"+m1);
-		
-	
 		 
-		  for(MasterEmployeeDetails m:g)
-		 {
+		 
+		 HistoryOfEmp historyOfEmployee=new HistoryOfEmp(
+				 newemployee.getLancesoft(),
+				 newemployee.getFirstName(),
+				 newemployee.getLastName(),
+				 newemployee.getJoiningDate(),
+				 newemployee.getDOB(),
+				 newemployee.getLocation(),
+				 newemployee.getGender(),
+				 newemployee.getEmail(),
+				 newemployee.getStatus(),
+				UpdateEmpStatus.PROMOTE,
+				 newemployee.getAge(),
+			     newemployee.getIsInternal(),
+				 newemployee.getPhoneNo(),
+				 newemployee.getCreatedBy(),
+				 newemployee.getExitAt(),
+				 newemployee.getSubDepartments(),
+				 newemployee.getDepartments(),
+				 newemployee.getDesignations(),
+				 newemployee.getSupervisor(),
+				 newemployee.getEmployeeType());
+				 System.out.println( "--------------------------------------------"+historyOfEmployee);
+		        historyRepository.save(historyOfEmployee);
+		      for(MasterEmployeeDetails m:g)
+		      {
 			  System.out.println(m);
 			 
 			  m.setSupervisor(newemployee);
@@ -83,13 +95,5 @@ public class GetSameDesignations {
 		   return "success";
 		   }
 	
-	
-	public  HistoryOfEmp Update(String  lancesoftid) {
-		
-		MasterEmployeeDetails details=masterEmployeeDetailsRepository.findByLancesoft(lancesoftid);
-		return historyOfEmpRepository.save(details);
-		
-		
-	}
 	}
 
