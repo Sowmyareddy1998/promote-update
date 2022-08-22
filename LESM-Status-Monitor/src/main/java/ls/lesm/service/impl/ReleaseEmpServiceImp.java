@@ -34,113 +34,74 @@ public class ReleaseEmpServiceImp {
 
 	@Autowired
 	private MasterEmployeeDetailsRepository masterEmployeeDetailsRepository;
+
+	@Autowired
+	private ReleaseEmpDetailsRepository releaseEmpDetailsRepository;
+	
 	
 	@Autowired
-	private ReleaseEmpDetailsRepository releaseEmpDetailsRepository; 
+	private UserRepository userRepository;
 	
+
 	@Autowired
-	private HistoryRepository  historyOfEmpRepository; 
-	
+	private HistoryRepository historyOfEmpRepository;
 
 	public List<MasterEmployeeDetails> getAllEmp() {
-		
-	return masterEmployeeDetailsRepository.findAll();
+
+		return masterEmployeeDetailsRepository.findAll();
 	}
 
+	public MasterEmployeeDetails get(int empId) {
+		MasterEmployeeDetails employee = masterEmployeeDetailsRepository.findById(empId).get();
+		System.out.println("-------------******************-----" + employee);
+		ReleaseEmpDetails releaseEmpDetails = new ReleaseEmpDetails();
+		releaseEmpDetails.setMasterEmployeeDetailsId(employee);
+		releaseEmpDetails.setMasterEmployeeDetailssupervisor(employee.getSupervisor());
+		releaseEmpDetails.setReleaseStatus(ReleaseStatus.ONHOLD);
+		releaseEmpDetailsRepository.save(releaseEmpDetails);
+		MasterEmployeeDetails m = employee.getSupervisor();
+		System.out.println("-------------------------------" + m);
+		System.err.println(m);
+		return m;
 
-	
-	
-	public MasterEmployeeDetails  get(int empId) {
-  MasterEmployeeDetails employee= masterEmployeeDetailsRepository.findById( empId).get();
-  System.out.println("-------------******************-----"+employee);
-  ReleaseEmpDetails  releaseEmpDetails =new ReleaseEmpDetails ();
-  releaseEmpDetails.setMasterEmployeeDetailsId(employee);
-  releaseEmpDetails.setMasterEmployeeDetailssupervisor(employee.getSupervisor());
-  releaseEmpDetails.setReleaseStatus(ReleaseStatus.ONHOLD);
-  releaseEmpDetailsRepository.save(releaseEmpDetails );
-  MasterEmployeeDetails m= employee.getSupervisor();
-  System.out.println("-------------------------------"+m);
-  System.err.println(m);
-  return m;
-	
+	}
+
+	public void approveRequest(int empId, String empstatus,Principal principal) {
+
+		MasterEmployeeDetails masterEmployeeDetails = masterEmployeeDetailsRepository.findById(empId).get();
+		User user=userRepository.findByUsername(principal.getName());
+		System.out.println(user);
+
+		ReleaseEmpDetails details = releaseEmpDetailsRepository.findBymasterEmployeeDetails_Id(empId).get();
+
+		System.out.println(details);
+
+		if (empstatus.equals("APPROVED")) {
+
+			HistoryOfEmp historyOfEmp = new HistoryOfEmp(masterEmployeeDetails.getLancesoft(),
+					masterEmployeeDetails.getFirstName(), masterEmployeeDetails.getLastName(),
+					masterEmployeeDetails.getJoiningDate(), masterEmployeeDetails.getDOB(),
+					masterEmployeeDetails.getLocation(), masterEmployeeDetails.getGender(),
+					masterEmployeeDetails.getEmail(), masterEmployeeDetails.getStatus(), UpdateEmpStatus.RELEASE,
+					masterEmployeeDetails.getAge(), masterEmployeeDetails.getIsInternal(),
+					masterEmployeeDetails.getPhoneNo(), masterEmployeeDetails.getCreatedBy(),
+					masterEmployeeDetails.getExitAt(), masterEmployeeDetails.getSubDepartments(),
+					masterEmployeeDetails.getDepartments(), masterEmployeeDetails.getDesignations(),
+					masterEmployeeDetails.getSupervisor(), masterEmployeeDetails.getEmployeeType());
+
+			historyOfEmpRepository.save(historyOfEmp);
+			
+			details.setReleaseStatus(ReleaseStatus.APPROVED);
+			details.setReleaseDate(LocalDate.now());
+			releaseEmpDetailsRepository.save(details);
+			
+			
+
+			masterEmployeeDetails.setStatus(EmployeeStatus.Exit);
+			masterEmployeeDetailsRepository.save(masterEmployeeDetails);
+
+		} else
+			details.setReleaseStatus(ReleaseStatus.DENIED);
+
+	}
 }
-	
-	
-	
-	
-	    public List<MasterEmployeeDetails> approveRequest(int supervisorId,String empstatus ) {
-	    	
-	    List<MasterEmployeeDetails> details=masterEmployeeDetailsRepository.findBymasterEmployeeDetails_Id(supervisorId);
-	    
-	    System.out.println(details);
-	   
-	    for(MasterEmployeeDetails m:details) {
-	    	
-	    
-	    
-	    if(empstatus.equals("APPROVED")) {
-	    	
-	    	HistoryOfEmp historyOfEmp=new HistoryOfEmp(
-	    			m.getLancesoft(),
-					m.getFirstName(),
-					m.getLastName(),
-				    m.getJoiningDate(),
-				    m.getDOB(),
-					m.getLocation(),
-					m.getGender(),
-					m.getEmail(),
-					m.getStatus(),
-					UpdateEmpStatus.RELEASE,
-					 m.getAge(),
-				     m.getIsInternal(),
-					 m.getPhoneNo(),
-				     m.getCreatedBy(),
-					 m.getExitAt(),
-					 m.getSubDepartments(),
-					 m.getDepartments(),
-					 m.getDesignations(),
-					 m.getSupervisor(),
-					 m.getEmployeeType());
-	    	
-	    	
-	    	historyOfEmpRepository.save(historyOfEmp);
-	    	 ReleaseEmpDetails releaseEmpDetails=new ReleaseEmpDetails();
-	    	
-	    	releaseEmpDetails.setReleaseStatus(ReleaseStatus.APPROVED);
-	    	releaseEmpDetails.setReleaseDate(LocalDate.now());
-	    	releaseEmpDetailsRepository.save(releaseEmpDetails);
-	    	
-	    	
-	    	m.setStatus(EmployeeStatus.Exit);
-	    	 masterEmployeeDetailsRepository.save(m);
-	    	
-	    }    	
-
-	    }
-	  		return details;
-	  	    }
-	  }
-
-	    	
-	    	
-	    	
-	    	
-	    	
-	    	 
-	    	
-	    	
-	    	
-	   
-	    
-	   
-		    	
-		    		
-	 
-	
-	    	
-	    	
-	      
-	    
-	  
-
-

@@ -47,18 +47,18 @@ public class PromoteEmployeeService {
 	
 	System.out.println("\n\n\n\n"+designations+"\n\n\n\n\n");
 	
-		MasterEmployeeDetails Exist=masterEmployeeDetailsRepository.findById(emp).get();
+		MasterEmployeeDetails masterEmployeeDetails=masterEmployeeDetailsRepository.findById(emp).get();
 		
 		
-		System.out.println("......................."+Exist);
+		System.out.println("......................."+masterEmployeeDetails);
 		Designations design=designationsRepository.findByDesgNames(designations.getDesgNames());
-		Exist.setDesignations(design);
-		MasterEmployeeDetails Exist1=masterEmployeeDetailsRepository.findById( superviserId).get();
-		System.out.println("......................."+Exist1);
-		Exist.setSupervisor(Exist1);
-		Exist.setUpdatedAt(new Date());
-		System.out.println(Exist);
-		return masterEmployeeDetailsRepository.save(Exist);
+		masterEmployeeDetails.setDesignations(design);
+		MasterEmployeeDetails DetailsSupervisor=masterEmployeeDetailsRepository.findById( superviserId).get();
+		System.out.println("......................."+DetailsSupervisor);
+		masterEmployeeDetails.setSupervisor(DetailsSupervisor);
+		masterEmployeeDetails.setUpdatedAt(new Date());
+		System.out.println(masterEmployeeDetails);
+		return masterEmployeeDetailsRepository.save(masterEmployeeDetails);
 	
 	}
 	}

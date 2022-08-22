@@ -1,5 +1,6 @@
 package ls.lesm.restcontroller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,11 +39,12 @@ public class ReleaseEmpController {
 		
 	}
    
-   @GetMapping("/send/{supervisorId}/{empstatus}")
-   public List<MasterEmployeeDetails> request(@PathVariable int supervisorId, @PathVariable String empstatus) {
+   @GetMapping("/send/{empId}/{empstatus}")
+   ResponseEntity<String>  request(@PathVariable int empId, @PathVariable String empstatus,Principal principal) {
 	   
 	   
- return  releaseEmpServiceImp.approveRequest(supervisorId,empstatus);
+  releaseEmpServiceImp.approveRequest(empId,empstatus,principal);
+  return new ResponseEntity<String>("request send to supervisor successfully",HttpStatus.ACCEPTED );
 	
 	   
    }
