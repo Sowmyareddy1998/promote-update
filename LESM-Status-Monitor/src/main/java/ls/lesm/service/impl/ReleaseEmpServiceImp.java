@@ -45,12 +45,12 @@ public class ReleaseEmpServiceImp {
 
 	@Autowired
 	private HistoryRepository historyOfEmpRepository;
-
+	//get all employees 
 	public List<MasterEmployeeDetails> getAllEmp() {
 
 		return masterEmployeeDetailsRepository.findAll();
 	}
-
+//select an employee for releasing
 	public MasterEmployeeDetails get(int empId) {
 		MasterEmployeeDetails employee = masterEmployeeDetailsRepository.findById(empId).get();
 		System.out.println("-------------******************-----" + employee);
@@ -65,13 +65,15 @@ public class ReleaseEmpServiceImp {
 		return m;
 
 	}
-
+	
+	
+    // send the request to supervisor
 	public void approveRequest(int empId, String empstatus,Principal principal) {
 
 		MasterEmployeeDetails masterEmployeeDetails = masterEmployeeDetailsRepository.findById(empId).get();
 		User user=userRepository.findByUsername(principal.getName());
 		System.out.println(user);
-
+ 
 		ReleaseEmpDetails details = releaseEmpDetailsRepository.findBymasterEmployeeDetails_Id(empId).get();
 
 		System.out.println(details);

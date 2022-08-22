@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ls.lesm.model.Designations;
 import ls.lesm.model.MasterEmployeeDetails;
 import ls.lesm.payload.request.PromoteEmployeeRequest;
-import ls.lesm.service.impl.GetSameDesignations;
-import ls.lesm.service.impl.PromoteEmployeeService;
+import ls.lesm.service.impl.PromoteEmpServiceImp;
+
 
 
 @Component
@@ -31,20 +31,11 @@ public class PromoteEmpController {
 	
 	
 	@Autowired
-	GetSameDesignations getSameDesignations;
+	PromoteEmpServiceImp promoteEmpServiceImp;
 	
-	@Autowired
-	private PromoteEmployeeService promoteEmployee; 
-	
+
 	
 	
-	@PutMapping("/update/{emp_id}/{sub_id}")
-	public  ResponseEntity<String>  promoteEmp(@RequestBody Designations designations,@PathVariable ("emp_id") int emp,@PathVariable(" sub_id") int superviserId,Principal principal)
-	{
-		MasterEmployeeDetails 	masterEmployeeDetails=new 	MasterEmployeeDetails();
-	    promoteEmployee. promoteEmployeeDetails(designations, emp, superviserId,principal);
-		return new ResponseEntity<String>("updated ",HttpStatus.CREATED );
-		}
 	
 	
 
@@ -54,20 +45,31 @@ public class PromoteEmpController {
 List<MasterEmployeeDetails>  getSameDesignationEmployees(@PathVariable int id)
 {
 	
-	
-	List<MasterEmployeeDetails> EmployeeDetails= getSameDesignations.getSameDesignations(id);
+	List<MasterEmployeeDetails> EmployeeDetails= promoteEmpServiceImp.getSameDesignations(id);
 	
 	return  EmployeeDetails;
 }
+
+
+
 
 @GetMapping("/setSupervisor/{id}/{id2}")
 
 ResponseEntity<String> promoteEmployeeDetail( @PathVariable int id,@PathVariable int id2,Principal principal)
 {
-getSameDesignations.promoteEmployeeDetails(id, id2, principal);
+promoteEmpServiceImp.promoteEmployeeDetails(id, id2, principal);
 return new ResponseEntity<String>("assigned successfully",HttpStatus.ACCEPTED );
 
 }
+
+@PutMapping("/update/{emp_id}/{sub_id}")
+public  ResponseEntity<String>  promoteEmp(@RequestBody Designations designations,@PathVariable ("emp_id") int emp,@PathVariable(" sub_id") int superviserId,Principal principal)
+{
+	MasterEmployeeDetails 	masterEmployeeDetails=new 	MasterEmployeeDetails();
+	promoteEmpServiceImp. promoteEmployeeDetails(designations, emp, superviserId,principal);
+	return new ResponseEntity<String>("updated ",HttpStatus.CREATED );
+	}
+
 
 
 

@@ -2,6 +2,7 @@ package ls.lesm.service.impl;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import ls.lesm.model.MasterEmployeeDetails;
 import ls.lesm.model.SubDepartments;
 import ls.lesm.model.UpdateEmpStatus;
 import ls.lesm.model.User;
+import ls.lesm.repository.DesignationsRepository;
 import ls.lesm.repository.HistoryRepository;
 import ls.lesm.repository.MasterEmployeeDetailsRepository;
 import ls.lesm.repository.UserRepository;
@@ -26,7 +28,7 @@ import ls.lesm.repository.UserRepository;
 
 
 @Service
-public class GetSameDesignations {
+public class PromoteEmpServiceImp {
 	
 	@Autowired
 	MasterEmployeeDetailsRepository masterEmployeeDetailsRepository;
@@ -36,6 +38,9 @@ public class GetSameDesignations {
 	
 	@Autowired
 	private HistoryRepository historyRepository;
+	
+	@Autowired
+	private DesignationsRepository designationsRepository;
 	
 	public List<MasterEmployeeDetails> getSameDesignations(int DesignationId)
 	 {
@@ -94,6 +99,34 @@ public class GetSameDesignations {
 			 }
 		   return "success";
 		   }
+	
+	
+	
+	
+	
+	
+	
+	public MasterEmployeeDetails promoteEmployeeDetails( Designations designations, int emp, int  superviserId,Principal principal) {
+		
+		 User user=userRepository.findByUsername(principal.getName());
+		System.out.println(user);
+	
+	System.out.println("\n\n\n\n"+designations+"\n\n\n\n\n");
+	
+		MasterEmployeeDetails masterEmployeeDetails=masterEmployeeDetailsRepository.findById(emp).get();
+		
+		
+		System.out.println("......................."+masterEmployeeDetails);
+		Designations design=designationsRepository.findByDesgNames(designations.getDesgNames());
+		masterEmployeeDetails.setDesignations(design);
+		MasterEmployeeDetails DetailsSupervisor=masterEmployeeDetailsRepository.findById( superviserId).get();
+		System.out.println("......................."+DetailsSupervisor);
+		masterEmployeeDetails.setSupervisor(DetailsSupervisor);
+		masterEmployeeDetails.setUpdatedAt(new Date());
+		System.out.println(masterEmployeeDetails);
+		return masterEmployeeDetailsRepository.save(masterEmployeeDetails);
+	
+	}
 	
 	}
 
